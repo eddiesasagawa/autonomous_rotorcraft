@@ -1,0 +1,18 @@
+This How-To documents the process for setting up the build environment.
+
+TODO .. in process
+
+Raspberry Pi Zero Wireless
+==========================
+- Set up Raspbian for wireless ssh
+- Configure wireless settings for extra security
+
+- Install gstreamer ...
+- Install ZeroMQ
+
+Desktop (Ubuntu 18.04)
+======================
+- Install gstreamer dependencies
+- Install OpenCV ...
+- Install ZeroMQ
+
