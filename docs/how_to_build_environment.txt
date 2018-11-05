@@ -16,3 +16,24 @@ Desktop (Ubuntu 18.04)
 - Install OpenCV ...
 - Install ZeroMQ
 
+Setting up cross-compiling for Raspberry Pi
+-------------------------------------------
+Follow instructions found at https://medium.com/@au42/the-useful-raspberrypi-cross-compile-guide-ea56054de187
+except using pigpio instead of wiringPi
+- In a separate directory for raspberry pi workspace (e.g. ~/raspberry-pi-tools/)
+    - git clone https://github.com/raspberrypi/tools
+    - git clone https://github.com/joan2937/pigpio
+    - Copy the toolchain-rpi.cmake file from firmware/arc directory to the pigpio directory
+    - In the pigpio directory:
+        - mkdir build && cd build
+        - cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain-rpi.cmake
+        - make
+        The above should succeed and produce the .so files in the build folder
+- To compile arc:
+    - cd firmware/arc
+    - mkdir build && cd build
+    - cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain-rpi.cmake
+    - make
+    The compiled object 'arc' will reside in build/src
+    You should be able to just scp it over to the raspberry pi and execute it.
+

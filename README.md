@@ -49,5 +49,7 @@ http://www.raspberry-projects.com/pi/pi-hardware/raspberry-pi-camera/streaming-v
 However, there seem to be better options for gstreamer in this thread, so that it is UDP not TCP:
 https://stackoverflow.com/questions/46219454/how-to-open-a-gstreamer-pipeline-from-opencv-with-videowriter
 
+Cross-compiling for raspberry pi:
+https://medium.com/@au42/the-useful-raspberrypi-cross-compile-guide-ea56054de187
 
 
