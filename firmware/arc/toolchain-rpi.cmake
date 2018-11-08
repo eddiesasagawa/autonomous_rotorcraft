@@ -10,6 +10,15 @@ SET(CMAKE_CXX_COMPILER $ENV{HOME}/raspberry-pi-tools/tools/arm-bcm2708/arm-rpi-4
 
 # Define the sysroot path for the raspberry pi distribution in our tools folder
 SET(CMAKE_FIND_ROOT_PATH $ENV{HOME}/raspberry-pi-tools/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot/)
+SET(CMAKE_SYSROOT ${CMAKE_FIND_ROOT_PATH})
+
+SET(triple arm-linux-gnueabihf)
+SET(PKG_CONFIG_EXECUTABLE ${triple}-pkg-config)
+SET(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:${CMAKE_SYSROOT}/usr/lib/pkgconfig:${CMAKE_SYSROOT}/usr/lib/${triple}/pkgconfig:${CMAKE_SYSROOT}/usr/share/pkgconfig")
+
+SET(ENV{PKG_CONFIG_DIR} "")
+SET(ENV{PKG_CONFIG_LIBDIR} ${CMAKE_SYSROOT}/usr/lib/pkgconfig:${CMAKE_SYSROOT}/usr/share/pkgconfig)
+SET(ENV{PKG_CONFIG_SYSROOT_DIR} ${CMAKE_SYSROOT})
 
 # Use our definitions for compiler tools
 SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)

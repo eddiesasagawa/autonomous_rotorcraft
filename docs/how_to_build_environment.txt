@@ -8,7 +8,6 @@ Raspberry Pi Zero Wireless
 - Configure wireless settings for extra security
 
 - Install gstreamer ...
-- Install ZeroMQ
 
 Desktop (Ubuntu 18.04)
 ======================
@@ -17,7 +16,9 @@ Desktop (Ubuntu 18.04)
 - Install ZeroMQ
 
 Setting up cross-compiling for Raspberry Pi
--------------------------------------------
+===========================================
+Toolchain + pigpio set up
+-------------------------
 Follow instructions found at https://medium.com/@au42/the-useful-raspberrypi-cross-compile-guide-ea56054de187
 except using pigpio instead of wiringPi
 - In a separate directory for raspberry pi workspace (e.g. ~/raspberry-pi-tools/)
@@ -26,14 +27,47 @@ except using pigpio instead of wiringPi
     - Copy the toolchain-rpi.cmake file from firmware/arc directory to the pigpio directory
     - In the pigpio directory:
         - mkdir build && cd build
-        - cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain-rpi.cmake
+        - cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain-rpi.cmake -DCMAKE_INSTALL_PREFIX=~/raspberry-pi-tools/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot/usr
         - make
         The above should succeed and produce the .so files in the build folder
-- To compile arc:
-    - cd firmware/arc
-    - mkdir build && cd build
-    - cmake .. -DCMAKE_TOOLCHAIN_FILE=toolchain-rpi.cmake
-    - make
-    The compiled object 'arc' will reside in build/src
-    You should be able to just scp it over to the raspberry pi and execute it.
+
+Set up ZeroMQ for Raspberry Pi
+------------------------------
+Took a little bit of work, but some references: 
+https://sappo.github.io/2016/10/13/Cross-compiling-for-the-Raspberry-Pi/
+https://raspberrypi.stackexchange.com/questions/6761/cross-compiling-missing-packages
+http://www.kaizou.org/2014/11/typical-cmake-project/
+
+- I chose to clone to my raspberry-pi-tools folder (where tools and pigpio reside): 
+    $ cd ~/raspberry-pi-tools
+- Clone libzmq: 
+    $ git clone https://github.com/zeromq/libzmq
+- Clone cppzmq: 
+    $ git clone https://github.com/zeromq/cppzmq.git
+
+- First install libzmq via cmake, per cppzmq build instructions:
+    $ cd libzmq
+    $ cp <path-to-this-repo>/firmware/arc/toolchain-rpi.cmake ./toolchain-rpi.cmake
+    $ mkdir build
+    $ cd build
+    $ cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain-rpi.cmake -DCMAKE_INSTALL_PREFIX=~/raspberry-pi-tools/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot/usr
+    $ make install -j4
+
+- Next install cppzmq by repeating the same steps
+    $ cd ~/raspberry-pi-tools/cppzmq
+    $ cp <path-to-this-repo>/firmware/arc/toolchain-rpi.cmake ./toolchain-rpi.cmake
+    $ mkdir build
+    $ cd build
+    $ cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain-rpi.cmake -DCMAKE_INSTALL_PREFIX=~/raspberry-pi-tools/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot/usr
+    $ make install -j4
+
+
+Compiling ARC
+=============
+$ cd firmware/arc
+$ mkdir build && cd build
+$ cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain-rpi.cmake -DCMAKE_INSTALL_PREFIX=~/raspberry-pi-tools/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot/usr
+$ make
+The compiled object 'arc' will reside in build/src
+You should be able to just scp it over to the raspberry pi and execute it.
 

@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <pigpio.h>
+#include <zmq.hpp>
 
 int main(int argc, char** argv) {
 
@@ -13,6 +14,8 @@ int main(int argc, char** argv) {
         return -1;
     }
 
+    zmq::context_t context;
+    
     printf("Hello world from rpi pigpio.. \n");
 
     gpioTerminate();
