@@ -5,11 +5,11 @@
 
 namespace arc { namespace common {
 
-class Message {
+struct Message {
     public:
-        virtual ~Message() {}
-        
-        virtual uint8_t* bytes(void) = 0;
+        virtual uint8_t* GetBytes() = 0;
+        virtual int MessageLen() = 0;
+        virtual int MessageId() = 0;
 };
 
 } } // arc::common

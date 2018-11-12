@@ -6,7 +6,9 @@
 
 #include <stdio.h>
 #include <pigpio.h>
-#include <zmq.hpp>
+
+#include "arc2host_interface.hh"
+#include "arc_host_msg.hh"
 
 int main(int argc, char** argv) {
 
@@ -14,9 +16,11 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    zmq::context_t context;
-    
+    arc::arc::Arc2HostInterface& a2h_if = arc::arc::Arc2HostInterface::GetInstance();
+    arc::common::AHIStatusMessage status;
+
     printf("Hello world from rpi pigpio.. \n");
+    printf("ZMQ wrappers success! : %d \n", status.MessageId());
 
     gpioTerminate();
     return 0;
