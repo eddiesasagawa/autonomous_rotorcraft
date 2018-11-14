@@ -9,6 +9,28 @@ Raspberry Pi Zero Wireless
 
 - Install gstreamer ...
 
+- FOR NOW, having trouble getting static libraries to work, so still need libraries installed in raspbian:
+- install pigpio:
+$ cd <wherever/you/want>
+$ git clone https://github.com/joan2937/pigpio.git
+$ cd pigpio
+$ mkdir build && cd build
+$ sudo make install
+
+- install ZeroMQ
+$ cd <wherever/you/want>
+$ git clone https://github.com/zeromq/libzmq.git
+$ cd libzmq
+$ mkdir build && cd build
+$ sudo make install
+
+$ cd <wherever/you/want>
+$ git clone https://github.com/zeromq/cppzmq.git
+$ cd cppzmq
+$ mkdir build && cd build
+$ sudo make install
+
+
 Desktop (Ubuntu 18.04)
 ======================
 - Install gstreamer dependencies
@@ -69,5 +91,12 @@ $ mkdir build && cd build
 $ cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain-rpi.cmake -DCMAKE_INSTALL_PREFIX=~/raspberry-pi-tools/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot/usr
 $ make
 The compiled object 'arc' will reside in build/src
-You should be able to just scp it over to the raspberry pi and execute it.
 
+You should be able to just scp it over to the raspberry pi and execute it.
+$ scp build/src/arc <rpiuser>@<rpi_ip_addr>:<destination/directory/arc>
+
+To execute on Raspberry Pi
+==========================
+For now, since static libraries are not working, need to provide library path
+Also need sudo for pigpio
+$ sudo LD_LIBRARY_PATH=/usr/local/lib <path/to/arc>/arc

@@ -50,7 +50,7 @@ void Arc2HostInterface::Connect(
 }
 
 bool Arc2HostInterface::Send(common::AHIMessage* msg) {
-    tx_socket_.send(msg->Pack());
+    return tx_socket_.send(msg->Pack());
 }
 
 common::AHIMessage Arc2HostInterface::RecvNonBlocking(bool* is_found) {
