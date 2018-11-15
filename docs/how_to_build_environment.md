@@ -6,9 +6,16 @@ Raspberry Pi Zero Wireless
 ==========================
 - Set up Raspbian for wireless ssh
 - Configure wireless settings for extra security
+- Run raspi-config to enable camera
 
-- Install gstreamer ...
+Install gstreamer
+-----------------
+$ sudo apt-get install gstreamer1.0-tools
+$ sudo apt-get install gstreamer1.0-plugins-bad
+    - you could install plugins-base and plugins-good if you want..
 
+Other libraries
+---------------
 - FOR NOW, having trouble getting static libraries to work, so still need libraries installed in raspbian:
 - install pigpio:
 $ cd <wherever/you/want>
