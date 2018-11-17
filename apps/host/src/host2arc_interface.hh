@@ -16,19 +16,8 @@ class Host2ArcInterface : public common::ArcHostInterface {
          */
         static Host2ArcInterface& GetInstance();
 
-        /**
-         * Connect the sockets up. Must be called once (and only once?)
-         */
-        virtual void Connect(
-            const uint32_t my_ip_addr,      /**< [in] IP address that this side runs from */
-            const uint16_t my_port,         /**< [in] Port that this side runs from */
-            const uint32_t dest_ip_addr,     /**< [in] IP address of destination */
-            const uint16_t dest_port        /**< [in] Port of destination */
-        ) override;
-
-        virtual bool Send(common::AHIMessage* msg) override;
-        virtual common::AHIMessage RecvNonBlocking(bool* is_found) override;
-
+        virtual zmq::socket_t* rx_socket() override;
+        virtual zmq::socket_t* tx_socket() override;
     private:
         /**
          * Private constructor to initialize member variables

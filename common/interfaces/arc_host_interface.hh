@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdexcept>
+#include <string>
 #include <zmq.hpp>
 
 #include "arc_host_msg.hh"
@@ -19,19 +20,21 @@ class ArcHostInterface {
          * Connect the sockets up. Must be called once (and only once? for now)
          */
         virtual void Connect(
-            const uint32_t my_ip_addr,      /**< [in] IP address that this side runs from */
-            const uint16_t my_port,         /**< [in] Port that this side runs from */
-            const uint32_t dest_ip_addr,     /**< [in] IP address of destination */
-            const uint16_t dest_port        /**< [in] Port of destination */
-        ) = 0;
+            const char* const my_ip_addr,      /**< [in] IP address that this side runs from */
+            const char* const my_port,         /**< [in] Port that this side runs from */
+            const char* const dest_ip_addr,     /**< [in] IP address of destination */
+            const char* const dest_port        /**< [in] Port of destination */
+        );
 
-        virtual bool Send(AHIMessage* msg) = 0;
+        virtual bool Send(AHIMessage* msg);
 
         /**
          * @return AHIMessage
          */
-        virtual AHIMessage RecvNonBlocking(bool* is_found) = 0;
+        virtual AHIMessage RecvNonBlocking(bool* is_found);
 
+        virtual zmq::socket_t* rx_socket() = 0;
+        virtual zmq::socket_t* tx_socket() = 0;
     protected:
         zmq::context_t context_;
         bool is_initialized_;
