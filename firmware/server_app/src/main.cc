@@ -9,7 +9,9 @@
  */
 
 #include <stdio.h>
+
 #include <opencv2/opencv.hpp>
+#include <zmq.hpp>
 
 // using namespace cv;
 
