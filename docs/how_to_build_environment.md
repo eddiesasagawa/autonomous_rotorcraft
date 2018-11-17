@@ -53,7 +53,7 @@ except using pigpio instead of wiringPi
 - In a separate directory for raspberry pi workspace (e.g. ~/raspberry-pi-tools/)
     - git clone https://github.com/raspberrypi/tools
     - git clone https://github.com/joan2937/pigpio
-    - Copy the toolchain-rpi.cmake file from firmware/arc directory to the pigpio directory
+    - Copy the toolchain-rpi.cmake file from apps/arc directory to the pigpio directory
     - In the pigpio directory:
         - mkdir build && cd build
         - cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain-rpi.cmake -DCMAKE_INSTALL_PREFIX=~/raspberry-pi-tools/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot/usr
@@ -76,7 +76,7 @@ http://www.kaizou.org/2014/11/typical-cmake-project/
 
 - First install libzmq via cmake, per cppzmq build instructions:
     $ cd libzmq
-    $ cp <path-to-this-repo>/firmware/arc/toolchain-rpi.cmake ./toolchain-rpi.cmake
+    $ cp <path-to-this-repo>/apps/arc/toolchain-rpi.cmake ./toolchain-rpi.cmake
     $ mkdir build
     $ cd build
     $ cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain-rpi.cmake -DCMAKE_INSTALL_PREFIX=~/raspberry-pi-tools/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot/usr
@@ -84,7 +84,7 @@ http://www.kaizou.org/2014/11/typical-cmake-project/
 
 - Next install cppzmq by repeating the same steps
     $ cd ~/raspberry-pi-tools/cppzmq
-    $ cp <path-to-this-repo>/firmware/arc/toolchain-rpi.cmake ./toolchain-rpi.cmake
+    $ cp <path-to-this-repo>/apps/arc/toolchain-rpi.cmake ./toolchain-rpi.cmake
     $ mkdir build
     $ cd build
     $ cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain-rpi.cmake -DCMAKE_INSTALL_PREFIX=~/raspberry-pi-tools/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot/usr
@@ -93,7 +93,7 @@ http://www.kaizou.org/2014/11/typical-cmake-project/
 
 Compiling ARC
 =============
-$ cd firmware/arc
+$ cd apps/arc
 $ mkdir build && cd build
 $ cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain-rpi.cmake -DCMAKE_INSTALL_PREFIX=~/raspberry-pi-tools/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot/usr
 $ make
