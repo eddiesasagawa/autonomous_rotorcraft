@@ -22,8 +22,13 @@ void UserInterface::ProcessInput(
     while ((ch = getch()) != ERR) {
         if ('x' == ch) {
             *quit_now = true;
+            break;
         } else {
-            auto callback = callback_map_.find(ch);
+            auto callback_it = callback_map_.find(ch);
+            if (callback_map_.end() != callback_it) {
+                /* valid key found, use it */
+                callback_it->second();
+            }
         }
     }
 }
