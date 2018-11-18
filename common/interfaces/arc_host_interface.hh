@@ -26,7 +26,7 @@ class ArcHostInterface {
             const char* const dest_port        /**< [in] Port of destination */
         );
 
-        virtual bool Send(AHIMessage* msg);
+        virtual bool Send(AHIMessage* const msg);
 
         /**
          * @return AHIMessage

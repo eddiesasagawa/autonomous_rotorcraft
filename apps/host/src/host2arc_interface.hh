@@ -18,6 +18,9 @@ class Host2ArcInterface : public common::ArcHostInterface {
 
         virtual zmq::socket_t* rx_socket() override;
         virtual zmq::socket_t* tx_socket() override;
+
+        void CommandMoreThrust();
+        
     private:
         /**
          * Private constructor to initialize member variables

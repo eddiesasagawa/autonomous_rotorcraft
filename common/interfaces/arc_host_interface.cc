@@ -40,7 +40,7 @@ void ArcHostInterface::Connect(
     is_initialized_ = true;
 }
 
-bool ArcHostInterface::Send(AHIMessage* msg) {
+bool ArcHostInterface::Send(AHIMessage* const msg) {
     zmq::message_t msgcopy;
     msgcopy.copy(msg->msg());
     return tx_socket()->send(msgcopy);

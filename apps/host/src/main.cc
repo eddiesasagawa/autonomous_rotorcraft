@@ -17,6 +17,7 @@
 #include <zmq.hpp>
 
 #include "host2arc_interface.hh"
+#include "user_interface.hh"
 
 // using namespace cv;
 
@@ -26,12 +27,24 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-
-
+    /* ARC Connection */
     arc::host::Host2ArcInterface& h2ai = arc::host::Host2ArcInterface::GetInstance();
     h2ai.Connect(argv[1], argv[2], argv[3], argv[4]);
 
+    /* Open CV stuff */
     cv::Mat image;
+
+    /* User interface */
+    arc::host::UserInterface user_if;
+    user_if.AddCallback('w', h2ai.CommandMoreThrust);
+
+    bool quit_now = false;
+
+    /** MAIN LOOP **/
+    while (!quit_now) {
+        user_if.ProcessInput(&quit_now);
+    }
+
     // image = cv::imread(argv[1], 1);
 
     // if (!image.data) {
