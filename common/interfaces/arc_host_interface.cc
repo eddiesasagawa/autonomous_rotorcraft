@@ -41,7 +41,9 @@ void ArcHostInterface::Connect(
 }
 
 bool ArcHostInterface::Send(AHIMessage* msg) {
-    return tx_socket()->send(msg->Pack());
+    zmq::message_t msgcopy;
+    msgcopy.copy(msg->msg());
+    return tx_socket()->send(msgcopy);
 }
 
 AHIMessage ArcHostInterface::RecvNonBlocking(bool* is_found) {
