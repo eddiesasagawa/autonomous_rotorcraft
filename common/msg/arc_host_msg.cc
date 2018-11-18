@@ -3,12 +3,26 @@
 
 namespace arc { namespace common {
 
-AHIMessage::AHIMessage() {
-    /* Do nothing */
+const AHIMessageId AHIMessage::kMsgId = kArcHostMsgIdUnknown;
+
+AHIMessage::AHIMessage() 
+    :   zmq_msg_(MessageNumBytes()),
+        p_data_((uint16_t*)zmq_msg_.data()) {
+    InitializeMsg();
 }
 
-AHIMessage::AHIMessage(const zmq::message_t* msg_in) {
-    /* Do nothing, since base class has no data */
+AHIMessage::AHIMessage(const zmq::message_t* msg_in) 
+    :   zmq_msg_(msg_in->size()),
+        p_data_((uint16_t*)zmq_msg_.data()) {
+    zmq_msg_.copy(msg_in);
+    p_data_ = (uint16_t*) zmq_msg_.data(); // re-assign since not sure if it might change on copy...
+    InitializeMsg();
+}
+
+void AHIMessage::InitializeMsg() {
+    p_data_[kArcHostMsgLayoutMsgId] = this->kMsgId;
+    p_data_[kArcHostMsgLayoutLength] = this->kDataLen;
+
 }
 
 AHIMessage AHIMessage::Decode(const zmq::message_t* msg_in) {
@@ -18,7 +32,7 @@ AHIMessage AHIMessage::Decode(const zmq::message_t* msg_in) {
 
     switch(data[kArcHostMsgLayoutMsgId]) {
         case kArcHostMsgIdCommand: {
-            return AHIMessage(msg_in);
+            return AHICommandMessage(msg_in);
         }
         
         case kArcHostMsgIdStatus: {
@@ -31,77 +45,48 @@ AHIMessage AHIMessage::Decode(const zmq::message_t* msg_in) {
     }
 }
 
-AHIMessageId AHIMessage::MessageId() {
-    return kArcHostMsgIdUnknown;
-}
-
-uint16_t AHIMessage::MessageNumWords() {
-    return AHIMessage::kArcHostMsgLayoutData;
-}
-
-zmq::message_t AHIMessage::Pack() {
-    zmq::message_t msg(MessageNumBytes());
-
-    /* For the base case, just pack the command and length */
-    PackHeader_((uint16_t*)msg.data(), MessageNumWords(), MessageId(), MessageNumWords());
-
-    return msg;
-}
-
-void AHIMessage::PackHeader_(uint16_t* buf, uint16_t buf_len, AHIMessageId msg_id, uint16_t msg_len) {
-    assert(buf_len > kArcHostMsgLayoutLength);
-
-    buf[kArcHostMsgLayoutMsgId] = msg_id;
-    buf[kArcHostMsgLayoutLength] = msg_len;
-}
-
-uint16_t* AHIMessage::AccessData() {
-    return NULL;
-}
-
-
+/*****************************************************************************/
 /**
  * AHI Status Message method definitions
  */
 const AHIMessageId AHIStatusMessage::kMsgId = kArcHostMsgIdStatus;
 
 AHIStatusMessage::AHIStatusMessage() 
-: payload{} {
+    : AHIMessage() {
     /* No need to do anything here */
 }
 
 AHIStatusMessage::AHIStatusMessage(const zmq::message_t* msg_in) 
-:   payload{} {
+    :   AHIMessage(msg_in) {
     assert(MessageNumBytes() == msg_in->size());
-
-    /* Load message contents into data buffer */
-    uint16_t* src_data = (uint16_t*)(msg_in->data());
-
-    memcpy(payload, (src_data + kArcHostMsgLayoutData), kDataLen);
 }
 
-AHIMessageId AHIStatusMessage::MessageId() {
-    return kMsgId;
+/**************************************************************************/
+/**
+ *  AHICommandMessage definitions
+ */
+const AHIMessageId AHICommandMessage::kMsgId = kArcHostMsgIdCommand;
+
+AHICommandMessage::AHICommandMessage() : AHIMessage() {
+    /* Initialize command to null cmd */
+    p_data_[kArcHostMsgLayoutData] = (uint16_t) kAhiNullCmd;
 }
 
-uint16_t AHIStatusMessage::MessageNumWords() {
-    return AHIMessage::kArcHostMsgLayoutData + kDataLen;
+AHICommandMessage::AHICommandMessage(const zmq::message_t* msg_in)
+: AHIMessage(msg_in) {
+    assert(MessageNumBytes() == msg_in->size());
 }
 
-zmq::message_t AHIStatusMessage::Pack() {
-    zmq::message_t msg(MessageNumBytes());
-
-    /* Pack header first */
-    PackHeader_((uint16_t*)(msg.data()), MessageNumWords(), MessageId(), MessageNumWords());
-
-    /* Pack data */
-    memcpy(((uint16_t*)msg.data()) + AHIMessage::kArcHostMsgLayoutData, payload, kDataLen);
-
-    return msg;
+AHICommandMessage::AHICommandMessage(CommandTypes cmd) : AHIMessage() {
+    p_data_[kArcHostMsgLayoutData] = (uint16_t) cmd;
 }
 
-uint16_t* AHIStatusMessage::AccessData() {
-    return payload;
+AHICommandMessage::CommandTypes AHICommandMessage::command() {
+    return (CommandTypes) p_data_[kArcHostMsgLayoutData];
+}
+
+void AHICommandMessage::command(AHICommandMessage::CommandTypes new_cmd) {
+    p_data_[kArcHostMsgLayoutData] = (uint16_t) new_cmd;
 }
 
 }} // arc::common

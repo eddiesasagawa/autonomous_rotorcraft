@@ -26,6 +26,8 @@ int main(int argc, char** argv) {
         return -1;
     }
 
+
+
     arc::host::Host2ArcInterface& h2ai = arc::host::Host2ArcInterface::GetInstance();
     h2ai.Connect(argv[1], argv[2], argv[3], argv[4]);
 

@@ -19,12 +19,12 @@ struct AHIMessage {
 
         static AHIMessage Decode(const zmq::message_t* msg_in);
 
-        virtual AHIMessageId MessageId();
-        virtual uint16_t MessageNumWords();
+        inline AHIMessageId MessageId() { return this->kMsgId; }
+        inline uint16_t MessagePayloadNumWords() { return this->kDataLen; }
+        inline uint16_t MessagePayloadNumBytes() { return (this->kDataLen)*sizeof(uint16_t); }
+        inline uint16_t MessageNumBytes() { return kArcHostMsgLayoutData + MessagePayloadNumBytes(); }
 
-        virtual zmq::message_t Pack();
-
-        inline uint16_t MessageNumBytes() { return MessageNumWords() * sizeof(uint16_t); }
+        inline zmq::message_t* msg() { return &(this->zmq_msg_); }
 
     protected:
         enum MessageLayout {
@@ -33,8 +33,14 @@ struct AHIMessage {
             kArcHostMsgLayoutData   = 2
         };
 
-        void PackHeader_(uint16_t* buf, uint16_t buf_len, AHIMessageId msg_id, uint16_t msg_len);
-        virtual uint16_t* AccessData();
+        void InitializeMsg();
+
+        zmq::message_t zmq_msg_;
+        uint16_t* p_data_;
+
+    private:
+        static const AHIMessageId kMsgId;
+        static const uint16_t kDataLen = 0;
 };
 
 /**
@@ -45,17 +51,33 @@ struct AHIStatusMessage : AHIMessage {
         AHIStatusMessage();
         AHIStatusMessage(const zmq::message_t* msg_in);
 
-        AHIMessageId MessageId() override;
-        uint16_t MessageNumWords() override;
-        zmq::message_t Pack() override;
-
     private:
-        uint16_t* AccessData() override;
-
         static const AHIMessageId kMsgId;
         static const uint16_t kDataLen = 3;
+};
 
-        uint16_t payload[kDataLen];
+/**
+ * Command message over AHI (H2A)
+ */
+struct AHICommandMessage : AHIMessage {
+    public:
+        enum CommandTypes {
+            kAhiNullCmd,
+            kAhiCmdMoreThrust,
+            kAhiCmdLessThrust,
+            kAhiCmdTurnLeft,
+            kAhiCmdTurnRight
+        };
+
+        AHICommandMessage();
+        AHICommandMessage(const zmq::message_t* msg_in);
+        AHICommandMessage(CommandTypes cmd);
+
+        CommandTypes command();
+        void command(CommandTypes new_cmd);
+    private:
+        static const AHIMessageId kMsgId;
+        static const uint16_t kDataLen = 1;
 };
 
 } } // arc::common
