@@ -45,6 +45,7 @@ int main(int argc, char** argv) {
         user_if.ProcessInput(&quit_now);
     }
 
+    printf("ARC Host exiting..\n");
     // image = cv::imread(argv[1], 1);
 
     // if (!image.data) {
