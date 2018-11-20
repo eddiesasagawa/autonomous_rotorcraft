@@ -24,7 +24,7 @@ struct AHIMessage {
         inline AHIMessageId MessageId() { return (AHIMessageId)(this->p_data_[kArcHostMsgLayoutMsgId]); }
         inline uint16_t MessagePayloadNumWords() { return this->p_data_[kArcHostMsgLayoutLength]; }
         inline uint16_t MessagePayloadNumBytes() { return (this->p_data_[kArcHostMsgLayoutLength])*sizeof(uint16_t); }
-        inline uint16_t MessageNumBytes() { return kArcHostMsgLayoutData + MessagePayloadNumBytes(); }
+        inline uint16_t MessageNumBytes() { return sizeof(uint16_t)*kArcHostMsgLayoutData + MessagePayloadNumBytes(); }
 
         inline zmq::message_t* msg() { return &(this->zmq_msg_); }
 

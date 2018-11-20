@@ -6,7 +6,7 @@ namespace arc { namespace common {
 const AHIMessageId AHIMessage::kMsgId = kArcHostMsgIdUnknown;
 
 AHIMessage::AHIMessage() 
-    :   zmq_msg_(kDataLen*sizeof(uint16_t) + kArcHostMsgLayoutData),
+    :   zmq_msg_((kDataLen + kArcHostMsgLayoutData)*sizeof(uint16_t)),
         p_data_((uint16_t*)zmq_msg_.data()) {
     InitializeMsg(kMsgId, kDataLen);
 }
@@ -23,7 +23,7 @@ AHIMessage::AHIMessage(const zmq::message_t* msg_in)
 }
 
 AHIMessage::AHIMessage(AHIMessageId msg_id, uint16_t data_len)
-    :   zmq_msg_(data_len*sizeof(uint16_t) + kArcHostMsgLayoutData),
+    :   zmq_msg_((data_len + kArcHostMsgLayoutData)*sizeof(uint16_t)),
         p_data_((uint16_t*)zmq_msg_.data()) {
     InitializeMsg(msg_id, data_len);
 }
@@ -39,7 +39,7 @@ std::shared_ptr<AHIMessage> AHIMessage::Decode(const zmq::message_t* msg_in) {
 
     uint16_t* data = (uint16_t*)msg_in->data();
 
-    printf("AHIMessage::Decode -- found %d\n", data[kArcHostMsgLayoutMsgId]);
+    // printf("AHIMessage::Decode -- found %d, size %d, len %d\n", data[kArcHostMsgLayoutMsgId], msg_in->size(), data[kArcHostMsgLayoutLength]);
     switch(data[kArcHostMsgLayoutMsgId]) {
         case kArcHostMsgIdCommand: {
             return std::make_shared<AHICommandMessage>(msg_in);

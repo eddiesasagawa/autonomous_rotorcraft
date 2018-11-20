@@ -44,7 +44,7 @@ void ArcHostInterface::Connect(
 bool ArcHostInterface::Send(AHIMessage* const msg) {
     zmq::message_t msgcopy;
     msgcopy.copy(msg->msg());
-    printf("Sending packet %d\r\n", msg->MessageId());
+    // printf("Sending packet %d w/ %lu size\r\n", msg->MessageId(), msgcopy.size());
     return tx_socket()->send(msgcopy);
 }
 
