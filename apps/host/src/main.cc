@@ -12,9 +12,7 @@
 #include <iostream>
 #include <string>
 
-#include <ncurses.h>
 #include <opencv2/opencv.hpp>
-#include <zmq.hpp>
 
 #include "host2arc_interface.hh"
 #include "user_interface.hh"
@@ -22,7 +20,7 @@
 // using namespace cv;
 
 int main(int argc, char** argv) {
-    if (argc != 4) {
+    if (argc != 5) {
         printf("usage: arc_host <MY_IP_ADDR> <MY_PORT> <ARC_IP_ADDR> <ARC_PORT>\n");
         return -1;
     }
@@ -36,7 +34,10 @@ int main(int argc, char** argv) {
 
     /* User interface */
     arc::host::UserInterface user_if;
-    user_if.AddCallback('w', h2ai.CommandMoreThrust);
+    user_if.AddCallback('w', [&](){
+        arc::common::AHICommandMessage msg(arc::common::AHICommandMessage::kAhiCmdMoreThrust);
+        h2ai.Send(&msg);
+    });
 
     bool quit_now = false;
 

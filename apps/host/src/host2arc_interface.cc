@@ -23,8 +23,8 @@ zmq::socket_t* Host2ArcInterface::tx_socket() {
     return &tx_socket_;
 }
 
-void Host2ArcInterface::CommandMoreThrust() {
-    common::AHICommandMessage msg(common::AHICommandMessage::kAhiCmdMoreThrust);
+void Host2ArcInterface::SendCommand(common::AHICommandMessage::CommandTypes cmd) {
+    common::AHICommandMessage msg(cmd);
     Send(&msg);
 }
 

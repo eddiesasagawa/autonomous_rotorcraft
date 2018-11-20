@@ -19,7 +19,7 @@ class Host2ArcInterface : public common::ArcHostInterface {
         virtual zmq::socket_t* rx_socket() override;
         virtual zmq::socket_t* tx_socket() override;
 
-        void CommandMoreThrust();
+        void SendCommand(common::AHICommandMessage::CommandTypes cmd);
         
     private:
         /**

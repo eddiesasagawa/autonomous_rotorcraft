@@ -44,12 +44,13 @@ void ArcHostInterface::Connect(
 bool ArcHostInterface::Send(AHIMessage* const msg) {
     zmq::message_t msgcopy;
     msgcopy.copy(msg->msg());
+    printf("Sending packet %d\r\n", msg->MessageId());
     return tx_socket()->send(msgcopy);
 }
 
 AHIMessage ArcHostInterface::RecvNonBlocking(bool* is_found) {
     zmq::message_t msg;
-    if (!rx_socket()->recv(&msg, ZMQ_NOBLOCK)) {
+    if (rx_socket()->recv(&msg, ZMQ_NOBLOCK)) {
         *is_found = true;
         return AHIMessage::Decode(&msg);
     }

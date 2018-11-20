@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <ncurses.h>
 
+#include <functional>
+
 namespace arc { namespace host {
 
 class UserInterface {
@@ -24,12 +26,14 @@ class UserInterface {
          */
         inline void AddCallback(
             const char trigger_key, /**< [in] char to trigger callback on */
-            void (*callback)(void)  /**< [in] function pointer to callback */
+            std::function<void()> callback  /**< [in] function pointer to callback */
         ) { callback_map_[trigger_key] = callback; }
 
     private:
         /** map of key presses to callbacks */
-        std::unordered_map<char, void(*)()> callback_map_;
+        std::unordered_map<char, std::function<void()>> callback_map_;
+
+        SCREEN* curses_term_;
 };
 
 }} // arc::host

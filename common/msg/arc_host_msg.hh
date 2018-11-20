@@ -16,12 +16,13 @@ struct AHIMessage {
     public:
         AHIMessage();
         AHIMessage(const zmq::message_t* msg_in);
+        AHIMessage(AHIMessageId msg_id, uint16_t data_len);
 
         static AHIMessage Decode(const zmq::message_t* msg_in);
 
-        inline AHIMessageId MessageId() { return this->kMsgId; }
-        inline uint16_t MessagePayloadNumWords() { return this->kDataLen; }
-        inline uint16_t MessagePayloadNumBytes() { return (this->kDataLen)*sizeof(uint16_t); }
+        inline AHIMessageId MessageId() { return (AHIMessageId)(this->p_data_[kArcHostMsgLayoutMsgId]); }
+        inline uint16_t MessagePayloadNumWords() { return this->p_data_[kArcHostMsgLayoutLength]; }
+        inline uint16_t MessagePayloadNumBytes() { return (this->p_data_[kArcHostMsgLayoutLength])*sizeof(uint16_t); }
         inline uint16_t MessageNumBytes() { return kArcHostMsgLayoutData + MessagePayloadNumBytes(); }
 
         inline zmq::message_t* msg() { return &(this->zmq_msg_); }
@@ -33,7 +34,7 @@ struct AHIMessage {
             kArcHostMsgLayoutData   = 2
         };
 
-        void InitializeMsg();
+        void InitializeMsg(AHIMessageId msg_id, uint16_t data_len);
 
         zmq::message_t zmq_msg_;
         uint16_t* p_data_;

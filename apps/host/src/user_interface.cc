@@ -2,9 +2,9 @@
 
 namespace arc { namespace host {
 
-UserInterface::UserInterface() : callback_map_() {
+UserInterface::UserInterface() : callback_map_(), curses_term_(NULL) {
     /* Set up ncurses */
-    initscr();  // initialize
+    curses_term_ = newterm(NULL, stderr, stdin);  // initialize
     cbreak();   // one char at a time
     nodelay(stdscr, true); // don't block on getch
     keypad(stdscr, true); // capture special keys
