@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdexcept>
 #include <string>
+#include <memory>
 #include <zmq.hpp>
 
 #include "arc_host_msg.hh"
@@ -31,7 +32,7 @@ class ArcHostInterface {
         /**
          * @return AHIMessage
          */
-        virtual AHIMessage RecvNonBlocking(bool* is_found);
+        virtual std::shared_ptr<AHIMessage> RecvNonBlocking(bool* is_found);
 
         virtual zmq::socket_t* rx_socket() = 0;
         virtual zmq::socket_t* tx_socket() = 0;

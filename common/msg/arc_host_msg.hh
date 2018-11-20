@@ -1,6 +1,7 @@
 #ifndef COMMON_ARC_HOST_MSG_HH
 #define COMMON_ARC_HOST_MSG_HH
 
+#include <memory>
 #include "zmq.hpp"
 
 namespace arc { namespace common {
@@ -18,7 +19,7 @@ struct AHIMessage {
         AHIMessage(const zmq::message_t* msg_in);
         AHIMessage(AHIMessageId msg_id, uint16_t data_len);
 
-        static AHIMessage Decode(const zmq::message_t* msg_in);
+        static std::shared_ptr<AHIMessage> Decode(const zmq::message_t* msg_in);
 
         inline AHIMessageId MessageId() { return (AHIMessageId)(this->p_data_[kArcHostMsgLayoutMsgId]); }
         inline uint16_t MessagePayloadNumWords() { return this->p_data_[kArcHostMsgLayoutLength]; }
@@ -67,7 +68,8 @@ struct AHICommandMessage : AHIMessage {
             kAhiCmdMoreThrust,
             kAhiCmdLessThrust,
             kAhiCmdTurnLeft,
-            kAhiCmdTurnRight
+            kAhiCmdTurnRight,
+            kAhiCmdQuit
         };
 
         AHICommandMessage();

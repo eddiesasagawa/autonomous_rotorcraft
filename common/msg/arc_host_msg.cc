@@ -34,7 +34,7 @@ void AHIMessage::InitializeMsg(AHIMessageId msg_id, uint16_t data_len) {
 
 }
 
-AHIMessage AHIMessage::Decode(const zmq::message_t* msg_in) {
+std::shared_ptr<AHIMessage> AHIMessage::Decode(const zmq::message_t* msg_in) {
     assert(msg_in->size() > kArcHostMsgLayoutLength);
 
     uint16_t* data = (uint16_t*)msg_in->data();
@@ -42,16 +42,16 @@ AHIMessage AHIMessage::Decode(const zmq::message_t* msg_in) {
     printf("AHIMessage::Decode -- found %d\n", data[kArcHostMsgLayoutMsgId]);
     switch(data[kArcHostMsgLayoutMsgId]) {
         case kArcHostMsgIdCommand: {
-            return AHICommandMessage(msg_in);
+            return std::make_shared<AHICommandMessage>(msg_in);
         }
         
         case kArcHostMsgIdStatus: {
-            return AHIStatusMessage(msg_in);
+            return std::make_shared<AHIStatusMessage>(msg_in);
         }
 
         case kArcHostMsgIdUnknown:
         default:
-            return AHIMessage(msg_in);
+            return std::make_shared<AHIMessage>(msg_in);
     }
 }
 

@@ -27,12 +27,15 @@ int main(int argc, char** argv) {
     bool msg_recvd = false;
 
     while (!quit_now) {
-        arc::common::AHIMessage msg = a2hi.RecvNonBlocking(&msg_recvd);
+        auto p_msg = a2hi.RecvNonBlocking(&msg_recvd);
         if (msg_recvd) {
-            printf("ARC received a message of type %d, yay!\n", msg.MessageId());
-            switch(msg.MessageId()) {
+            printf("ARC received a message of type %d, yay!\n", p_msg->MessageId());
+            switch(p_msg->MessageId()) {
                 case arc::common::kArcHostMsgIdCommand: {
-                    printf("ARC -- recvd cmd type: %d\n", ((arc::common::AHICommandMessage*)&msg)->command());
+                    auto p_cmd_msg = std::static_pointer_cast<arc::common::AHICommandMessage>(p_msg);
+                    printf("ARC -- recvd cmd type: %d\n", p_cmd_msg->command());
+
+                    quit_now = (p_cmd_msg->command() == arc::common::AHICommandMessage::kAhiCmdQuit);
                     break;
                 }
             }

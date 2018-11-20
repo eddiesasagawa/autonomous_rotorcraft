@@ -34,8 +34,25 @@ int main(int argc, char** argv) {
 
     /* User interface */
     arc::host::UserInterface user_if;
+
     user_if.AddCallback('w', [&](){
         arc::common::AHICommandMessage msg(arc::common::AHICommandMessage::kAhiCmdMoreThrust);
+        h2ai.Send(&msg);
+    });
+    user_if.AddCallback('s', [&](){
+        arc::common::AHICommandMessage msg(arc::common::AHICommandMessage::kAhiCmdLessThrust);
+        h2ai.Send(&msg);
+    });
+    user_if.AddCallback('a', [&](){
+        arc::common::AHICommandMessage msg(arc::common::AHICommandMessage::kAhiCmdTurnLeft);
+        h2ai.Send(&msg);
+    });
+    user_if.AddCallback('d', [&](){
+        arc::common::AHICommandMessage msg(arc::common::AHICommandMessage::kAhiCmdTurnRight);
+        h2ai.Send(&msg);
+    });
+    user_if.AddCallback('q', [&](){
+        arc::common::AHICommandMessage msg(arc::common::AHICommandMessage::kAhiCmdQuit);
         h2ai.Send(&msg);
     });
 

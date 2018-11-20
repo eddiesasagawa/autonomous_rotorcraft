@@ -48,7 +48,7 @@ bool ArcHostInterface::Send(AHIMessage* const msg) {
     return tx_socket()->send(msgcopy);
 }
 
-AHIMessage ArcHostInterface::RecvNonBlocking(bool* is_found) {
+std::shared_ptr<AHIMessage> ArcHostInterface::RecvNonBlocking(bool* is_found) {
     zmq::message_t msg;
     if (rx_socket()->recv(&msg, ZMQ_NOBLOCK)) {
         *is_found = true;
@@ -56,7 +56,7 @@ AHIMessage ArcHostInterface::RecvNonBlocking(bool* is_found) {
     }
 
     *is_found = false;
-    return AHIMessage();
+    return nullptr;
 }
 
 }} // arc::common
