@@ -46,9 +46,24 @@ set(ARC_COMMON_SRC
     ${ARC_COMMON_DIR}/msg/arc_host_msg.cc
 )
 
-# compiler/linker flags
-message(STATUS "Using sysroot: ${CMAKE_SYSROOT}")
+# ARC sources
+set(ARC_SRC_APP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/app)
+set(ARC_SRC_APP
+    ${ARC_SRC_APP_DIR}/arc.cc
+    ${ARC_SRC_APP_DIR}/arc2host_interface.cc
+)
 
+set(ARC_SRC_BSP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bsp)
+set(ARC_SRC_BSP
+)
+
+include_directories(
+    ${ARC_SRC_APP_DIR}
+    ${ARC_SRC_BSP_DIR}
+)
+
+# compiler/linker flags
+# message(STATUS "Using sysroot: ${CMAKE_SYSROOT}")
 # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --sysroot=${CMAKE_SYSROOT}" CACHE INTERNAL "" FORCE)
 # set(CMAKE_C_LINK_FLAGS "${CMAKE_C_LINK_FLAGS} --sysroot=${CMAKE_SYSROOT}" CACHE INTERNAL "" FORCE)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --sysroot=${CMAKE_SYSROOT}" CACHE INTERNAL "" FORCE)
@@ -64,7 +79,12 @@ message(STATUS "Using sysroot: ${CMAKE_SYSROOT}")
 # include_directories(BEFORE SYSTEM ${RPI_SYSROOT}/../include/c++/4.9.3)
 
 # Executable
-add_executable(arc main.cc arc2host_interface.cc ${ARC_COMMON_SRC})
+add_executable(arc
+    main.cc
+    ${ARC_COMMON_SRC}
+    ${ARC_SRC_APP}
+    ${ARC_SRC_BSP}
+)
 target_compile_features(arc PUBLIC cxx_std_11)
 # target_compile_definitions(arc PRIVATE ZMQ_STATIC)
 
