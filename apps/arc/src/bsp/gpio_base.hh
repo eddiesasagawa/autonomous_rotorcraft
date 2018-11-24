@@ -1,7 +1,7 @@
 #ifndef ARC_GPIO_BASE_HH
 #define ARC_GPIO_BASE_HH
 
-#include <pigpio.h>
+#include <stdint.hpp>
 
 namespace arc { namespace arc { namespace bsp {
 

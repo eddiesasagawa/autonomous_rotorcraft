@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#include <pigpio.h>
 #include "gpio_base.hh"
 
 namespace arc { namespace arc { namespace bsp {

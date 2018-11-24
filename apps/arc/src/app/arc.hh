@@ -3,6 +3,8 @@
 
 #include "arc2host_interface.hh"
 
+#include "spdlog.h"
+
 namespace arc { namespace arc {
 
 class Arc {
@@ -29,6 +31,7 @@ class Arc {
 
     private:
         Arc2HostInterface& a2hi_;
+        std::shared_ptr<spdlog::logger> logger_;
 };
 
 }} // arc::arc

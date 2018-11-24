@@ -7,26 +7,45 @@ namespace arc { namespace arc { namespace bsp {
 
 class Motor : public GpioBase {
     public:
-        Motor(uint16_t gpio);
+        Motor(
+            uint16_t pwm_pin /**< [in] pin ID for PWM */
+        );
         ~Motor();
 
-        bool SetPWM(uint16_t duty_cycle) { return gpioPWM(gpio_num_, duty_cycle) == 0; }
+        bool SetPWM(
+            uint16_t duty_cycle /**< [in] PWM duty cycle,  */
+        );
 
     protected:
-        uint16_t gpio_num_;
+        uint16_t pwm_pin_id_;
 };
 
 class UnidirectionalMotor : public Motor {
     public:
-        UnidirectionalMotor();
+        UnidirectionalMotor(
+            uint16_t pwm_pin /**< [in] pin ID for PWM */
+        );
         ~UnidirectionalMotor();
 
 };
 
 class BidirectionalMotor : public Motor {
     public:
-        BidirectionalMotor();
+        enum Direction {
+            kMotorDirPositive = 0,
+            kMotorDirNegative = 1
+        };
+
+        BidirectionalMotor(
+            uint16_t pwm_pin,   /**< [in] pin ID for PWM output */
+            uint16_t dir_pin    /**< [in] pin ID for direction output */
+        );
         ~BidirectionalMotor();
+
+        bool SetDirection(Direction dir);
+        
+    private:
+        uint16_t dir_pin_id_;
 };
 
 }}} //arc::arc::bsp

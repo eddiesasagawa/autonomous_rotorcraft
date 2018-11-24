@@ -32,6 +32,17 @@ if(NOT cppzmq_FOUND)
     message(STATUS "cppzmq library not found")
 endif()
 
+#### SPDLOG
+set(SPDLOG_PATH $ENV{HOME}/raspberry-pi-tools/spdlog)
+set(SPDLOG_BUILD_PATH ${SPDLOG_PATH}/build)
+set(SPDLOG_BUILD_BENCH OFF)
+include_directories(include ${SPDLOG_PATH}/include/spdlog)
+add_subdirectory(${SPDLOG_PATH} ${CMAKE_CURRENT_BINARY_DIR}/spdlog)
+
+# include_directories(include ${SPDLOG_PATH})
+# find_package(spdlog)
+# include_directories(include ${spdlog_LIB})
+
 ## Project sources
 # library headers and sources
 set(ARC_COMMON_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../common)
@@ -88,4 +99,4 @@ add_executable(arc
 target_compile_features(arc PUBLIC cxx_std_11)
 # target_compile_definitions(arc PRIVATE ZMQ_STATIC)
 
-target_link_libraries(arc ${PIGPIO_LIB} cppzmq)
+target_link_libraries(arc ${PIGPIO_LIB} cppzmq spdlog)

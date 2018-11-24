@@ -1,6 +1,7 @@
 #include "arc.hh"
 
 #include <pigpio.h>
+#include "spdlog/sinks/stdout_color_sinks.h"
 
 #include "arc_host_msg.hh"
 
@@ -11,15 +12,16 @@ Arc::Arc(
     const char* const my_port,         /**< [in] Port that this side runs from */
     const char* const dest_ip_addr,     /**< [in] IP address of destination */
     const char* const dest_port        /**< [in] Port of destination */
-) : a2hi_(Arc2HostInterface::GetInstance()) {
+) : a2hi_(Arc2HostInterface::GetInstance()),
+    logger_(spdlog::stdout_color_st("console")) {
     /* Initialize ARC here */
-    printf("ARC -- initializing.\n");
+    logger_->info("ARC -- initializing.");
     a2hi_.Connect(my_ip_addr, my_port, dest_ip_addr, dest_port);
 }
 
 Arc::~Arc() {
     /* Clean up ARC*/
-    printf("ARC -- terminating.\n");
+    logger_->info("ARC -- terminating.");
 }
 
 void Arc::Spin() {

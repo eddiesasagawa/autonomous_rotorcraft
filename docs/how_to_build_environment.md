@@ -90,6 +90,16 @@ http://www.kaizou.org/2014/11/typical-cmake-project/
     $ cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain-rpi.cmake -DCMAKE_INSTALL_PREFIX=~/raspberry-pi-tools/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot/usr
     $ make install -j4
 
+Set up spdlog for Raspberry Pi
+------------------------------
+Use spdlog for logging
+$ cd ~/raspberry-pi-tools
+$ git clone https://github.com/gabime/spdlog.git
+$ cd spdlog
+$ cp <path-to-this-repo>/apps/arc/toolchain-rpi.cmake ./toolchain-rpi.cmake
+$ mkdir build && cd build
+$ cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain-rpi.cmake -DCMAKE_INSTALL_PREFIX=~/raspberry-pi-tools/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot/usr -DSPDLOG_BUILD_BENCH=OFF -DSPDLOG_BUILD_TESTING=OFF -DSPDLOG_BUILD_EXAMPLES=OFF
+$ make install -j4
 
 Compiling ARC
 =============
