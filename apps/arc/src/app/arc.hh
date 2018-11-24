@@ -30,6 +30,8 @@ class Arc {
         void Spin();
 
     private:
+        std::shared_ptr<spdlog::logger> InitializeLogger();
+
         Arc2HostInterface& a2hi_;
         std::shared_ptr<spdlog::logger> logger_;
 };

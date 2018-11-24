@@ -13,7 +13,7 @@ Arc::Arc(
     const char* const dest_ip_addr,     /**< [in] IP address of destination */
     const char* const dest_port        /**< [in] Port of destination */
 ) : a2hi_(Arc2HostInterface::GetInstance()),
-    logger_(spdlog::stdout_color_st("console")) {
+    logger_(InitializeLogger()) {
     /* Initialize ARC here */
     logger_->info("ARC -- initializing.");
     a2hi_.Connect(my_ip_addr, my_port, dest_ip_addr, dest_port);
@@ -49,6 +49,14 @@ void Arc::Spin() {
         }
     }
 
+}
+
+std::shared_ptr<spdlog::logger> Arc::InitializeLogger(){
+    auto l = spdlog::stdout_color_st("arc");
+
+    /* Configure logger otherwise */
+
+    return l;
 }
 
 }} //arc::arc

@@ -4,8 +4,10 @@ project(arc_host)
 find_package( OpenCV REQUIRED )
 find_package( cppzmq REQUIRED )
 find_package( Curses REQUIRED )
+find_package( spdlog REQUIRED )
 
 include_directories(${CURSES_INCLUDE_DIR})
+include_directories(${SPDLOG_INCLUDE_DIR})
 
 # library headers and sources
 set(ARC_COMMON_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../common)
@@ -32,4 +34,5 @@ target_link_libraries(arc_host
     ${OpenCV_LIBS} 
     cppzmq
     ${CURSES_LIBRARIES}
+    spdlog
 )
