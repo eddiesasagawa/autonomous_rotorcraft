@@ -54,6 +54,7 @@ include_directories(
 )
 set(ARC_COMMON_SRC 
     ${ARC_COMMON_DIR}/interfaces/arc_host_interface.cc 
+    ${ARC_COMMON_DIR}/interfaces/arc_errors.cc
     ${ARC_COMMON_DIR}/msg/arc_host_msg.cc
 )
 

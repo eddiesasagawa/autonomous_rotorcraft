@@ -4,6 +4,8 @@
 #include <memory>
 #include "zmq.hpp"
 
+#include "arc_errors.hh"
+
 namespace arc { namespace common {
 
 enum AHIMessageId {
@@ -39,6 +41,10 @@ struct AHIMessage {
 
         zmq::message_t zmq_msg_;
         uint16_t* p_data_;
+
+        shared_log_ptr_t logger_;
+        
+        static const std::string kLogName;
 
     private:
         static const AHIMessageId kMsgId;

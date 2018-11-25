@@ -3,17 +3,23 @@
 
 namespace arc { namespace common {
 
+const std::string AHIMessage::kLogName = "ahi_msg";
 const AHIMessageId AHIMessage::kMsgId = kArcHostMsgIdUnknown;
 
 AHIMessage::AHIMessage() 
     :   zmq_msg_((kDataLen + kArcHostMsgLayoutData)*sizeof(uint16_t)),
-        p_data_((uint16_t*)zmq_msg_.data()) {
+        p_data_((uint16_t*)zmq_msg_.data()),
+        logger_(Log::RetrieveLogger(kLogName)) {
+
+    /* Initialize the message */
     InitializeMsg(kMsgId, kDataLen);
 }
 
 AHIMessage::AHIMessage(const zmq::message_t* msg_in) 
     :   zmq_msg_(msg_in->size()),
-        p_data_((uint16_t*)zmq_msg_.data()) {
+        p_data_((uint16_t*)zmq_msg_.data()),
+        logger_(Log::RetrieveLogger(kLogName)) {
+
     zmq_msg_.copy(msg_in);
     p_data_ = (uint16_t*) zmq_msg_.data(); // re-assign since not sure if it might change on copy...
     InitializeMsg(
@@ -24,7 +30,9 @@ AHIMessage::AHIMessage(const zmq::message_t* msg_in)
 
 AHIMessage::AHIMessage(AHIMessageId msg_id, uint16_t data_len)
     :   zmq_msg_((data_len + kArcHostMsgLayoutData)*sizeof(uint16_t)),
-        p_data_((uint16_t*)zmq_msg_.data()) {
+        p_data_((uint16_t*)zmq_msg_.data()),
+        logger_(Log::RetrieveLogger(kLogName)) {
+
     InitializeMsg(msg_id, data_len);
 }
 
