@@ -41,10 +41,9 @@ Motor::~Motor() {
 common::ArcErrorCodes Motor::SetPWM(
     uint16_t duty_cycle /**< [in] PWM duty cycle,  */
 ) {
-    common::Log::PrintOnError(
-        logger_, __FILE__, __LINE__,
-        MapReturnCode(gpioPWM(pwm_pin_id_, duty_cycle))
-    );
+    common::ArcErrorCodes err_code = MapReturnCode(gpioPWM(pwm_pin_id_, duty_cycle));
+    common::Log::PrintOnError(logger_, __FILE__, __LINE__, err_code);
+    return err_code;
 }
 
 /************************************************************************************/
@@ -71,10 +70,9 @@ BidirectionalMotor::BidirectionalMotor(uint16_t pwm_pin, uint16_t dir_pin)
 BidirectionalMotor::~BidirectionalMotor() {}
 
 common::ArcErrorCodes BidirectionalMotor::SetDirection(BidirectionalMotor::Direction dir) {
-    common::Log::PrintOnError(
-        logger_, __FILE__, __LINE__,
-        MapReturnCode(gpioWrite(dir_pin_id_, dir))
-    );
+    common::ArcErrorCodes err_code = MapReturnCode(gpioWrite(dir_pin_id_, dir));
+    common::Log::PrintOnError(logger_, __FILE__, __LINE__, err_code);
+    return err_code;
 }
 
 

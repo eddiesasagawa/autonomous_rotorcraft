@@ -1,7 +1,6 @@
 #ifndef ARC_GPIO_BASE_HH
 #define ARC_GPIO_BASE_HH
 
-#include <stdint.hpp>
 #include "arc_errors.hh"
 
 namespace arc { namespace arc { namespace bsp {

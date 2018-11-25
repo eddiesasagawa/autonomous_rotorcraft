@@ -8,7 +8,7 @@ set(PIGPIO_PATH $ENV{HOME}/raspberry-pi-tools/pigpio)
 set(PIGPIO_BUILD_PATH ${PIGPIO_PATH}/build)
 
 # Add the local 'include' directory and the pigpio directory to grab headers
-include_directories(include ${PIGPIO_PATH})
+include_directories(include SYSTEM ${PIGPIO_PATH})
 
 # Actually find the pigpio library object
 find_library(PIGPIO_LIB pigpio HINTS ${PIGPIO_BUILD_PATH} NO_CMAKE_FIND_ROOT_PATH)
