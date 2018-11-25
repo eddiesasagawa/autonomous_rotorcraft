@@ -2,6 +2,7 @@
 #define ARC_ARC_HH
 
 #include "arc2host_interface.hh"
+#include "arc_control.hh"
 #include "arc_errors.hh"
 
 namespace arc { namespace arc {
@@ -31,6 +32,8 @@ class Arc {
     private:
         Arc2HostInterface& a2hi_;
         common::shared_log_ptr_t logger_;
+
+        ControlSystem controller_;
 
         static const std::string kLogName;
 };

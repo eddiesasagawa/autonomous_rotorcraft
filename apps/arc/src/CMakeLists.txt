@@ -63,10 +63,13 @@ set(ARC_SRC_APP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/app)
 set(ARC_SRC_APP
     ${ARC_SRC_APP_DIR}/arc.cc
     ${ARC_SRC_APP_DIR}/arc2host_interface.cc
+    ${ARC_SRC_APP_DIR}/arc_control.cc
 )
 
 set(ARC_SRC_BSP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bsp)
 set(ARC_SRC_BSP
+    ${ARC_SRC_BSP_DIR}/gpio_base.cc
+    ${ARC_SRC_BSP_DIR}/motor.cc
 )
 
 include_directories(
