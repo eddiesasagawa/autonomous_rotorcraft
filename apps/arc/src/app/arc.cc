@@ -1,11 +1,12 @@
 #include "arc.hh"
 
 #include <pigpio.h>
-#include "spdlog/sinks/stdout_color_sinks.h"
 
 #include "arc_host_msg.hh"
 
 namespace arc { namespace arc {
+
+const std::string Arc::kLogName = "arc";
 
 Arc::Arc(
     const char* const my_ip_addr,      /**< [in] IP address that this side runs from */
@@ -13,7 +14,7 @@ Arc::Arc(
     const char* const dest_ip_addr,     /**< [in] IP address of destination */
     const char* const dest_port        /**< [in] Port of destination */
 ) : a2hi_(Arc2HostInterface::GetInstance()),
-    logger_(InitializeLogger()) {
+    logger_(common::Log::RetrieveLogger(kLogName)) {
     /* Initialize ARC here */
     logger_->info("ARC -- initializing.");
     a2hi_.Connect(my_ip_addr, my_port, dest_ip_addr, dest_port);
@@ -36,27 +37,19 @@ void Arc::Spin() {
             switch(p_msg->MessageId()) {
                 case common::kArcHostMsgIdCommand: {
                     auto p_cmd_msg = std::static_pointer_cast<common::AHICommandMessage>(p_msg);
-                    printf("ARC received Command -- type: %d\n", p_cmd_msg->command());
+                    logger_->info("ARC received Command -- type: %d\n", p_cmd_msg->command());
 
                     quit_now = (p_cmd_msg->command() == common::AHICommandMessage::kAhiCmdQuit);
                     break;
                 }
 
                 default:
-                    printf("ARC received a message of type %d!\n", p_msg->MessageId());
+                    logger_->info("ARC received a message of type %d!\n", p_msg->MessageId());
                     break;
             }
         }
     }
 
-}
-
-std::shared_ptr<spdlog::logger> Arc::InitializeLogger(){
-    auto l = spdlog::stdout_color_st("arc");
-
-    /* Configure logger otherwise */
-
-    return l;
 }
 
 }} //arc::arc

@@ -2,8 +2,7 @@
 #define ARC_ARC_HH
 
 #include "arc2host_interface.hh"
-
-#include "spdlog.h"
+#include "arc_errors.hh"
 
 namespace arc { namespace arc {
 
@@ -30,10 +29,10 @@ class Arc {
         void Spin();
 
     private:
-        std::shared_ptr<spdlog::logger> InitializeLogger();
-
         Arc2HostInterface& a2hi_;
-        std::shared_ptr<spdlog::logger> logger_;
+        common::shared_log_ptr_t logger_;
+
+        static const std::string kLogName;
 };
 
 }} // arc::arc

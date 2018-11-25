@@ -8,9 +8,12 @@ namespace arc { namespace common {
 //     return ArcHostInterface();
 // }
 
+const std::string ArcHostInterface::kLogName = "ahi_if";
+
 ArcHostInterface::ArcHostInterface() 
     :   context_(1),
-        is_initialized_(false) {
+        is_initialized_(false),
+        logger_(Log::RetrieveLogger(kLogName)) {
     /* Do other initialization tasks here */
 }
 
@@ -38,7 +41,7 @@ void ArcHostInterface::Connect(
 
     /* Indicate initialization */
     is_initialized_ = true;
-    printf("Connected to %s:%s from %s:%s\n", my_ip_addr, my_port, dest_ip_addr, dest_port);
+    logger_->info("Connected to %s:%s from %s:%s\n", my_ip_addr, my_port, dest_ip_addr, dest_port);
 }
 
 bool ArcHostInterface::Send(AHIMessage* const msg) {

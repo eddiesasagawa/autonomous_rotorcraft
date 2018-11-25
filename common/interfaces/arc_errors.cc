@@ -14,12 +14,13 @@ shared_log_ptr_t Log::RetrieveLogger(
 }
 
 ArcErrorCodes Log::PrintOnError(
-    const shared_log_ptr_t& logger,  /**< [in] Pass the logger by reference */
-    const int line,                                 /**< [in] line number of file this occurs at */
-    const ArcErrorCodes error                       /**< [in] error code to process */
+    const shared_log_ptr_t& logger, /**< [in] Pass the logger by reference */
+    const char* const file,         /**< [in] file name */
+    const int line,                 /**< [in] line number of file this occurs at */
+    const ArcErrorCodes error       /**< [in] error code to process */
 ) {
     if (kArcErrorNone != error) {
-        logger->error("[L%04d] 0x%04X", line, error);
+        logger->error("[%s][L%04d] 0x%04X", file, line, error);
     }
     return error;
 }

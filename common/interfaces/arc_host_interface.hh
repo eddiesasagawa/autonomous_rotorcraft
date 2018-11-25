@@ -8,6 +8,7 @@
 #include <zmq.hpp>
 
 #include "arc_host_msg.hh"
+#include "arc_errors.hh"
 
 namespace arc { namespace common {
 
@@ -39,6 +40,9 @@ class ArcHostInterface {
     protected:
         zmq::context_t context_;
         bool is_initialized_;
+
+        shared_log_ptr_t logger_;
+        static const std::string kLogName;
 
         /**
          * Private constructor to initialize member variables

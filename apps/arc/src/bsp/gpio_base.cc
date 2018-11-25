@@ -5,18 +5,20 @@
 
 namespace arc { namespace arc { namespace bsp {
 
+const std::string GpioBase::kLogName = "gpio";
 int16_t GpioBase::ref_count_ = 0;
 
-GpioBase::GpioBase() {
+GpioBase::GpioBase() 
+: logger_(common::Log::RetrieveLogger(kLogName)) {
     if (0 == ref_count_++) {
-        printf("GPIO -- initializing pigpio.\n");
+        logger_->info("GPIO -- initializing pigpio.");
         gpioInitialise();
     }
 }
 
 GpioBase::~GpioBase() {
     if (0 == --ref_count_) {
-        printf("GPIO -- terminating pigpio.\n");
+        logger_->info("GPIO -- terminating pigpio.");
         gpioTerminate();
     }
 }
