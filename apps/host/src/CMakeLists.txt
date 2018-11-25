@@ -5,7 +5,7 @@ project(arc_host)
 
 find_package( OpenCV REQUIRED )
 find_package( cppzmq REQUIRED )
-find_package( Curses REQUIRED )
+# find_package( Curses REQUIRED )
 # find_package( spdlog REQUIRED )
 
 # get_directory_property(_vars VARIABLES)
@@ -15,7 +15,7 @@ find_package( Curses REQUIRED )
 #     message(STATUS "${_var} = ${${_var}}")
 # endforeach()
 
-include_directories(include ${CURSES_INCLUDE_DIR})
+# include_directories(include ${CURSES_INCLUDE_DIR})
 
 ### SPDLOG
 set(SPDLOG_PATH $ENV{HOME}/support/spdlog)
@@ -48,6 +48,6 @@ add_executable(arc_host ${ARC_HOST_SRCS} ${ARC_COMMON_SRC})
 target_link_libraries(arc_host 
     ${OpenCV_LIBS} 
     cppzmq
-    ${CURSES_LIBRARIES}
+    # ${CURSES_LIBRARIES}
     spdlog
 )

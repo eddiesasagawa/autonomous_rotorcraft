@@ -2,7 +2,7 @@
 #define HOST_USER_INTERFACE_HH
 
 #include <unordered_map>
-#include <ncurses.h>
+#include <termios.h>
 
 #include <functional>
 
@@ -33,7 +33,8 @@ class UserInterface {
         /** map of key presses to callbacks */
         std::unordered_map<char, std::function<void()>> callback_map_;
 
-        SCREEN* curses_term_;
+        termios original_settings_;
+        termios new_settings_;
 };
 
 }} // arc::host

@@ -2,16 +2,24 @@
 
 namespace arc { namespace host {
 
-UserInterface::UserInterface() : callback_map_(), curses_term_(NULL) {
-    /* Set up ncurses */
-    curses_term_ = newterm(NULL, stderr, stdin);  // initialize
-    cbreak();   // one char at a time
-    nodelay(stdscr, true); // don't block on getch
-    keypad(stdscr, true); // capture special keys
+UserInterface::UserInterface() 
+:   callback_map_(), 
+    original_settings_(),
+    new_settings_()
+{
+    /* initialize terminal io settings */
+    tcgetattr(0, &original_settings_);  // save original settings
+    new_settings_ = original_settings_; // initialize new settings with original
+
+    new_settings_.c_lflag &= ~ICANON; // disable buffered i/o
+    new_settings_.c_lflag |= ECHO; // set echo mode, clear the bit to unset
+
+    tcsetattr(0, TCSANOW, &new_settings_); // apply new settings
+
 }
 
 UserInterface::~UserInterface() {
-    endwin(); // restore terminal settings
+    tcsetattr(0, TCSANOW, &original_settings_); // restore terminal settings
 }
 
 void UserInterface::ProcessInput(
@@ -19,7 +27,7 @@ void UserInterface::ProcessInput(
 ) {
     char ch = 0;
 
-    while ((ch = getch()) != ERR) {
+    while ((ch = getchar()) != EOF) {
         if ('x' == ch) {
             *quit_now = true;
             break;
