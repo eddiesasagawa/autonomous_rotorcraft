@@ -12,7 +12,7 @@ class Motor : public GpioBase {
         );
         ~Motor();
 
-        bool SetPWM(
+        common::ArcErrorCodes SetPWM(
             uint16_t duty_cycle /**< [in] PWM duty cycle,  */
         );
 
@@ -42,7 +42,7 @@ class BidirectionalMotor : public Motor {
         );
         ~BidirectionalMotor();
 
-        bool SetDirection(Direction dir);
+        common::ArcErrorCodes SetDirection(Direction dir);
         
     private:
         uint16_t dir_pin_id_;

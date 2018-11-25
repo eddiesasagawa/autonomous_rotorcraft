@@ -14,10 +14,15 @@ enum ArcErrorCodes {
     kArcErrorNone = 0,
     
     /* GPIO errors */
+    kArcErrorGpioBadPinInput,
     kArcErrorGpioBadPin,
-    karcErrorGpioBadMode,
+    kArcErrorGpioBadMode,
+    kArcErrorGpioBadPwmRange,
+    kArcErrorGpioBadPwmCommand,
+    kArcErrorGpioBadLevel,
 
     /* For book keeping */
+    kArcErrorUnknownCode,
     kArcErrorCodeCount
 };
 
