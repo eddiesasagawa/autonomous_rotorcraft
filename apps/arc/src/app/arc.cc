@@ -38,14 +38,14 @@ void Arc::Spin() {
             switch(p_msg->MessageId()) {
                 case common::kArcHostMsgIdCommand: {
                     auto p_cmd_msg = std::static_pointer_cast<common::AHICommandMessage>(p_msg);
-                    logger_->info("ARC received Command -- type: %d\n", p_cmd_msg->command());
+                    logger_->info("ARC received Command -- type: {:d}", p_cmd_msg->command());
 
                     quit_now = (p_cmd_msg->command() == common::AHICommandMessage::kAhiCmdQuit);
                     break;
                 }
 
                 default:
-                    logger_->info("ARC received a message of type %d!\n", p_msg->MessageId());
+                    logger_->info("ARC received a message of type {:d}", p_msg->MessageId());
                     break;
             }
         }

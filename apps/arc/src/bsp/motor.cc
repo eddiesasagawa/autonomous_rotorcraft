@@ -31,7 +31,7 @@ Motor::Motor(
         MapReturnCode(pwm_duty_range)
     );
 
-    logger_->info("MOTOR -- motor pwm pin #%d to %d hz and range %d.", pwm_pin_id_, pwm_freq_hz, pwm_duty_range);
+    logger_->info("MOTOR -- motor pwm pin #{:d} to {:d} hz and range {:d}.", pwm_pin_id_, pwm_freq_hz, pwm_duty_range);
 }
 
 Motor::~Motor() {

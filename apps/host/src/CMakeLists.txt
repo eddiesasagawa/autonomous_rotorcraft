@@ -1,13 +1,27 @@
 project(arc_host)
 
 # Dependencies
+# get_directory_property(_vars_before VARIABLES)
+
 find_package( OpenCV REQUIRED )
 find_package( cppzmq REQUIRED )
 find_package( Curses REQUIRED )
-find_package( spdlog REQUIRED )
+# find_package( spdlog REQUIRED )
 
-include_directories(${CURSES_INCLUDE_DIR})
-include_directories(${SPDLOG_INCLUDE_DIR})
+# get_directory_property(_vars VARIABLES)
+
+# list(REMOVE_ITEM _vars _vars_before ${_vars_before})
+# foreach(_var IN LISTS _vars)
+#     message(STATUS "${_var} = ${${_var}}")
+# endforeach()
+
+include_directories(include ${CURSES_INCLUDE_DIR})
+
+### SPDLOG
+set(SPDLOG_PATH $ENV{HOME}/support/spdlog)
+set(SPDLOG_BUILD_BENCH OFF)
+include_directories(include ${SPDLOG_PATH}/include/spdlog)
+add_subdirectory(${SPDLOG_PATH} ${CMAKE_CURRENT_BINARY_DIR}/spdlog)
 
 # library headers and sources
 set(ARC_COMMON_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../common)

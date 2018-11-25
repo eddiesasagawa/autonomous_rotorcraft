@@ -20,7 +20,7 @@ ArcErrorCodes Log::PrintOnError(
     const ArcErrorCodes error       /**< [in] error code to process */
 ) {
     if (kArcErrorNone != error) {
-        logger->error("[%s][L%04d] 0x%04X", file, line, error);
+        logger->error("[{}][L{:04d}] 0x{:04X}", file, line, error);
     }
     return error;
 }
