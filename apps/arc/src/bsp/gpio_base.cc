@@ -8,8 +8,16 @@ namespace arc { namespace arc { namespace bsp {
 const std::string GpioBase::kLogName = "gpio";
 int16_t GpioBase::ref_count_ = 0;
 
-GpioBase::GpioBase() 
+GpioBase::GpioBase()
 : logger_(common::Log::RetrieveLogger(kLogName)) {
+    if (0 == ref_count_++) {
+        logger_->info("GPIO -- initializing pigpio.");
+        gpioInitialise();
+    }
+}
+
+GpioBase::GpioBase(std::string log_name)
+: logger_(common::Log::RetrieveLogger(log_name)) {
     if (0 == ref_count_++) {
         logger_->info("GPIO -- initializing pigpio.");
         gpioInitialise();

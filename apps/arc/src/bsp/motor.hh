@@ -18,6 +18,9 @@ class Motor : public GpioBase {
 
     protected:
         uint16_t pwm_pin_id_;
+
+    private:
+        virtual inline std::string LoggerName() { return "motor"; }
 };
 
 class UnidirectionalMotor : public Motor {
@@ -43,7 +46,7 @@ class BidirectionalMotor : public Motor {
         ~BidirectionalMotor();
 
         common::ArcErrorCodes SetDirection(Direction dir);
-        
+
     private:
         uint16_t dir_pin_id_;
 };

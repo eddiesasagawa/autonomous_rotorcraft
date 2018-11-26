@@ -8,6 +8,7 @@ namespace arc { namespace arc { namespace bsp {
 class GpioBase {
     public:
         GpioBase();
+        GpioBase(std::string log_name);
         ~GpioBase();
 
     protected:
@@ -24,6 +25,6 @@ class GpioBase {
         static int16_t ref_count_;
 };
 
-}}} 
+}}}
 
 #endif //ARC_GPIO_BASE_HH
