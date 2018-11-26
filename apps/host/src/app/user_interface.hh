@@ -3,8 +3,9 @@
 
 #include <unordered_map>
 #include <termios.h>
-
 #include <functional>
+
+#include "arc_errors.hh"
 
 namespace arc { namespace host {
 
@@ -35,6 +36,9 @@ class UserInterface {
 
         termios original_settings_;
         termios new_settings_;
+
+        common::shared_log_ptr_t logger_;
+        static const std::string kLogName;
 };
 
 }} // arc::host

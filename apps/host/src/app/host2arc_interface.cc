@@ -13,6 +13,8 @@ Host2ArcInterface::Host2ArcInterface()
     :   rx_socket_(context_, ZMQ_SUB),
         tx_socket_(context_, ZMQ_PUSH) {
     /* base class constructor will handle its members */
+    /* set a timeout on tx */
+    tx_socket_.setsockopt(ZMQ_SNDTIMEO, 100); // timeout in ms
 }
 
 zmq::socket_t* Host2ArcInterface::rx_socket() {

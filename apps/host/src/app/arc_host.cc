@@ -1,6 +1,5 @@
 #include "arc_host.hh"
 
-
 #include <opencv2/opencv.hpp>
 
 namespace arc { namespace host {
@@ -17,7 +16,20 @@ ArcHost::ArcHost(
     logger_(common::Log::RetrieveLogger(kLogName))
 {
     logger_->info("initializing.");
+    logger_->set_level(spdlog::level::debug);
+
     h2ai_.Connect(my_ip_addr, my_port, dest_ip_addr, dest_port);
+}
+
+ArcHost::~ArcHost() {
+    logger_->info("terminating.");
+}
+
+void ArcHost::Spin() {
+    /* Just make an opencv image to test the library */
+    cv::Mat image;
+
+    bool quit_now = false;
 
     /* register some callbacks to user interface */
     user_if_.AddCallback('w', [&](){
@@ -45,18 +57,8 @@ ArcHost::ArcHost(
         logger_->debug("commanding program termination.");
         h2ai_.Send(&msg);
     });
-}
 
-ArcHost::~ArcHost() {
-    logger_->info("terminating.");
-}
-
-void ArcHost::Spin() {
-    /* Just make an opencv image to test the library */
-    cv::Mat image;
-
-    bool quit_now = false;
-
+    /* main loop */
     while(!quit_now) {
         user_if_.ProcessInput(&quit_now);
     }
