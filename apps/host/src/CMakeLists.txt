@@ -38,10 +38,20 @@ set(ARC_COMMON_SRC
 )
 
 # The main program
+set(ARC_HOST_APP_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/app)
+set(ARC_HOST_APP_SRC
+    ${ARC_HOST_APP_SRC_DIR}/arc_host.cc
+    ${ARC_HOST_APP_SRC_DIR}/host2arc_interface.cc
+    ${ARC_HOST_APP_SRC_DIR}/user_interface.cc
+)
+
+include_directories(
+    ${ARC_HOST_APP_SRC_DIR}
+)
+
 set(ARC_HOST_SRCS 
     main.cc
-    user_interface.cc
-    host2arc_interface.cc
+    ${ARC_HOST_APP_SRC}
 )
 
 add_executable(arc_host ${ARC_HOST_SRCS} ${ARC_COMMON_SRC})

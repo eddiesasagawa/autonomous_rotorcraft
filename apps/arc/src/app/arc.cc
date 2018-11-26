@@ -17,13 +17,13 @@ Arc::Arc(
     logger_(common::Log::RetrieveLogger(kLogName)),
     controller_() {
     /* Initialize ARC here */
-    logger_->info("ARC -- initializing.");
+    logger_->info("initializing.");
     a2hi_.Connect(my_ip_addr, my_port, dest_ip_addr, dest_port);
 }
 
 Arc::~Arc() {
     /* Clean up ARC*/
-    logger_->info("ARC -- terminating.");
+    logger_->info("terminating.");
 }
 
 void Arc::Spin() {
