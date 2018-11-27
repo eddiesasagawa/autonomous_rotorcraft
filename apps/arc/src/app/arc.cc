@@ -43,8 +43,11 @@ void Arc::Spin() {
 
                     switch (p_cmd_msg->command()) {
                         case common::AHICommandMessage::kAhiCmdPitchForward: {
-                            if (tail_cmd < (100-5)) {
+                            if (tail_cmd < 100) {
                                 tail_cmd += 5;
+                            }
+                            if (tail_cmd > 100) {
+                                tail_cmd = 100;
                             }
                             logger_->info("updating tail cmd to {}", tail_cmd);
                             controller_.InputDirectMotorCmds(0,0,tail_cmd);
@@ -52,8 +55,11 @@ void Arc::Spin() {
                         }
 
                         case common::AHICommandMessage::kAhiCmdPitchBack: {
-                            if (tail_cmd > (-100 + 5)) {
+                            if (tail_cmd > (-100)) {
                                 tail_cmd -= 5;
+                            }
+                            if (tail_cmd < -100) {
+                                tail_cmd = -100;
                             }
                             logger_->info("updating tail cmd to {}", tail_cmd);
                             controller_.InputDirectMotorCmds(0,0,tail_cmd);

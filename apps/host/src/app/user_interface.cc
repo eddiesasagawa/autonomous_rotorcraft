@@ -41,7 +41,6 @@ void UserInterface::ProcessInput(
         } else {
             auto callback_it = callback_map_.find(ch);
             if (callback_map_.end() != callback_it) {
-                logger_->debug("got ch '{}'", ch);
                 /* valid key found, use it */
                 callback_it->second();
             }
