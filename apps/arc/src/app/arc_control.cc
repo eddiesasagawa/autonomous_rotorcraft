@@ -3,7 +3,7 @@
 namespace arc { namespace arc {
 
 ControlSystem::ControlSystem()
-: tail_rotor_(kTailPwmPin, kTailDirectionPin) {
+: tail_rotor_("tail_rotor", kTailPwmPin, kTailDirectionPin) {
 
 }
 

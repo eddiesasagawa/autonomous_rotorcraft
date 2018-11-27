@@ -12,7 +12,8 @@ namespace arc { namespace arc { namespace bsp {
 class Motor : public GpioBase {
     public:
         Motor(
-            uint16_t pwm_pin /**< [in] pin ID for PWM */
+            std::string name,   /**< [in] name of motor */
+            uint16_t pwm_pin    /**< [in] pin ID for PWM */
         );
         ~Motor();
 
@@ -29,15 +30,22 @@ class Motor : public GpioBase {
         int16_t prev_cmd_pct_;
 };
 
+/**
+ * Uni-Directional Motor (can only spin in one direction)
+ */
 class UnidirectionalMotor : public Motor {
     public:
         UnidirectionalMotor(
+            std::string name,   /**< [in] name of motor */
             uint16_t pwm_pin /**< [in] pin ID for PWM */
         );
         ~UnidirectionalMotor();
 
 };
 
+/**
+ * Bi-directional motor (can spin in either direction)
+ */
 class BidirectionalMotor : public Motor {
     public:
         enum Direction {
@@ -46,6 +54,7 @@ class BidirectionalMotor : public Motor {
         };
 
         BidirectionalMotor(
+            std::string name,   /**< [in] name of motor */
             uint16_t pwm_pin,   /**< [in] pin ID for PWM output */
             uint16_t dir_pin    /**< [in] pin ID for direction output */
         );

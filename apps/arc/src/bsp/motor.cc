@@ -6,8 +6,9 @@
 namespace arc { namespace arc { namespace bsp {
 
 Motor::Motor(
+    std::string name,   /**< [in] name of motor */
     uint16_t pwm_pin /**< [in] pin ID for PWM */
-) : GpioBase("motor"),
+) : GpioBase(name),
     pwm_pin_id_(pwm_pin),
     prev_cmd_pct_(0)
 {
@@ -65,15 +66,24 @@ common::ArcErrorCodes Motor::SetMotorCmd(
 }
 
 /************************************************************************************/
-UnidirectionalMotor::UnidirectionalMotor(uint16_t pwm_pin) : Motor(pwm_pin) {
+UnidirectionalMotor::UnidirectionalMotor(
+    std::string name,   /**< [in] name of motor */
+    uint16_t pwm_pin
+) : Motor(name, pwm_pin)
+{
     logger_->info("constructed uni-directional motor: PWM#{}", pwm_pin);
 }
 
 UnidirectionalMotor::~UnidirectionalMotor() {}
 
 /************************************************************************************/
-BidirectionalMotor::BidirectionalMotor(uint16_t pwm_pin, uint16_t dir_pin)
-: Motor(pwm_pin), dir_pin_id_(dir_pin) {
+BidirectionalMotor::BidirectionalMotor(
+    std::string name,   /**< [in] name of motor */
+    uint16_t pwm_pin,
+    uint16_t dir_pin
+) : Motor(name, pwm_pin),
+    dir_pin_id_(dir_pin)
+{
     /* configure the direction pin */
     assert(common::kArcErrorNone == common::Log::PrintOnError(
         logger_, __FILE__, __LINE__,
