@@ -8,7 +8,8 @@ namespace arc { namespace arc { namespace bsp {
 Motor::Motor(
     uint16_t pwm_pin /**< [in] pin ID for PWM */
 ) : GpioBase("motor"),
-    pwm_pin_id_(pwm_pin)
+    pwm_pin_id_(pwm_pin),
+    prev_cmd_pct_(0)
 {
     /* Configure the pin for output */
     /* Make sure there were no issues with using the pin */
@@ -48,6 +49,21 @@ common::ArcErrorCodes Motor::SetPWM(
     return err_code;
 }
 
+common::ArcErrorCodes Motor::SetMotorCmd(
+    int16_t cmd_pct     /**< [in] PWM command percentage (0 to 100) */
+) {
+    if (cmd_pct > 100) {
+        logger_->warn("motor command {} too high", cmd_pct);
+        cmd_pct = 100;
+    } else if (cmd_pct < 0) {
+        logger_->warn("motor command {} less than 0", cmd_pct);
+        cmd_pct = 0;
+    }
+
+    prev_cmd_pct_ = cmd_pct;
+    return SetPWM(cmd_pct);
+}
+
 /************************************************************************************/
 UnidirectionalMotor::UnidirectionalMotor(uint16_t pwm_pin) : Motor(pwm_pin) {
     logger_->info("constructed uni-directional motor: PWM#{}", pwm_pin);
@@ -81,5 +97,28 @@ common::ArcErrorCodes BidirectionalMotor::SetDirection(BidirectionalMotor::Direc
     return err_code;
 }
 
+common::ArcErrorCodes BidirectionalMotor::SetMotorCmd(
+    int16_t cmd_pct     /**< [in] PWM command percentage and direction (-100 to 100) */
+) {
+    /* Really should have slew rate checks, but that is a TODO */
+    if (cmd_pct > 100) {
+        logger_->warn("motor cmd {} > 100", cmd_pct);
+        cmd_pct = 100;
+    } else if (cmd_pct < -100) {
+        logger_->warn("motor cmd {} < -100", cmd_pct);
+        cmd_pct = -100;
+    }
+
+    /* top bit is sign bit */
+    if ((cmd_pct & 0x8000) != (prev_cmd_pct_ & 0x8000)) {
+        /* direction of cmd needs to change
+         *  top bit being set means it is negative
+         */
+        SetDirection( (cmd_pct & 0x8000) ? kMotorDirNegative : kMotorDirPositive );
+    }
+
+    prev_cmd_pct_ = cmd_pct;
+    return SetPWM(abs(cmd_pct));
+}
 
 }}} //arc::arc::bsp

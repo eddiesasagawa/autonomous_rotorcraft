@@ -5,6 +5,10 @@
 
 namespace arc { namespace arc { namespace bsp {
 
+/**
+ * TODO(eddie) Add additional variables and logic for handling motor specs such as slew limits,
+ * min/max limits, etc.
+ */
 class Motor : public GpioBase {
     public:
         Motor(
@@ -16,11 +20,13 @@ class Motor : public GpioBase {
             uint16_t duty_cycle /**< [in] PWM duty cycle,  */
         );
 
+        virtual common::ArcErrorCodes SetMotorCmd(
+            int16_t cmd_pct     /**< [in] PWM command percentage (0 to 100) */
+        );
+
     protected:
         uint16_t pwm_pin_id_;
-
-    private:
-        virtual inline std::string LoggerName() { return "motor"; }
+        int16_t prev_cmd_pct_;
 };
 
 class UnidirectionalMotor : public Motor {
@@ -46,6 +52,9 @@ class BidirectionalMotor : public Motor {
         ~BidirectionalMotor();
 
         common::ArcErrorCodes SetDirection(Direction dir);
+        common::ArcErrorCodes SetMotorCmd(
+            int16_t cmd_pct     /**< [in] PWM command percentage and direction (-100 to 100) */
+        ) override;
 
     private:
         uint16_t dir_pin_id_;
