@@ -43,7 +43,7 @@ struct AHIMessage {
         uint16_t* p_data_;
 
         shared_log_ptr_t logger_;
-        
+
         static const std::string kLogName;
 
     private:
@@ -75,6 +75,8 @@ struct AHICommandMessage : AHIMessage {
             kAhiCmdLessThrust,
             kAhiCmdTurnLeft,
             kAhiCmdTurnRight,
+            kAhiCmdPitchForward,
+            kAhiCmdPitchBack,
             kAhiCmdQuit
         };
 

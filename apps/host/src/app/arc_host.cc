@@ -33,13 +33,13 @@ void ArcHost::Spin() {
 
     /* register some callbacks to user interface */
     user_if_.AddCallback('w', [&](){
-        common::AHICommandMessage msg(common::AHICommandMessage::kAhiCmdMoreThrust);
-        logger_->debug("commanding more thrust.");
+        common::AHICommandMessage msg(common::AHICommandMessage::kAhiCmdPitchForward);
+        logger_->debug("commanding pitch fwd.");
         h2ai_.Send(&msg);
     });
     user_if_.AddCallback('s', [&](){
-        common::AHICommandMessage msg(common::AHICommandMessage::kAhiCmdLessThrust);
-        logger_->debug("commanding less thrust.");
+        common::AHICommandMessage msg(common::AHICommandMessage::kAhiCmdPitchBack);
+        logger_->debug("commanding pitch back.");
         h2ai_.Send(&msg);
     });
     user_if_.AddCallback('a', [&](){

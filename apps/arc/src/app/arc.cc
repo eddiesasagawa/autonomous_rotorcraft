@@ -30,6 +30,8 @@ void Arc::Spin() {
     bool quit_now = false;
     bool msg_recvd = false;
 
+    int16_t tail_cmd = 0;
+
     /* main loop */
     while (!quit_now) {
         auto p_msg = a2hi_.RecvNonBlocking(&msg_recvd);
@@ -38,9 +40,36 @@ void Arc::Spin() {
             switch(p_msg->MessageId()) {
                 case common::kArcHostMsgIdCommand: {
                     auto p_cmd_msg = std::static_pointer_cast<common::AHICommandMessage>(p_msg);
-                    logger_->info("ARC received Command -- type: {:d}", p_cmd_msg->command());
 
-                    quit_now = (p_cmd_msg->command() == common::AHICommandMessage::kAhiCmdQuit);
+                    switch (p_cmd_msg->command()) {
+                        case common::AHICommandMessage::kAhiCmdPitchForward: {
+                            if (tail_cmd < (100-5)) {
+                                tail_cmd += 5;
+                            }
+                            logger_->info("updating tail cmd to {}", tail_cmd);
+                            controller_.InputDirectMotorCmds(0,0,tail_cmd);
+                            break;
+                        }
+
+                        case common::AHICommandMessage::kAhiCmdPitchBack: {
+                            if (tail_cmd > (-100 + 5)) {
+                                tail_cmd -= 5;
+                            }
+                            logger_->info("updating tail cmd to {}", tail_cmd);
+                            controller_.InputDirectMotorCmds(0,0,tail_cmd);
+                            break;
+                        }
+
+                        case common::AHICommandMessage::kAhiCmdQuit: {
+                            quit_now = true;
+                            break;
+                        }
+
+                        default:
+                            logger_->info("ARC received command -- type: {:d}", p_cmd_msg->command());
+                            break;
+                    }
+
                     break;
                 }
 
