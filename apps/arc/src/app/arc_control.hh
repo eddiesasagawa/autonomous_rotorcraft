@@ -1,6 +1,7 @@
 #ifndef ARC_CONTROL_HH
 #define ARC_CONTROL_HH
 
+#include "gnc_autopilot.hh"
 #include "motor.hh"
 
 namespace arc { namespace arc {
@@ -11,9 +12,7 @@ class ControlSystem {
         ~ControlSystem();
 
         void InputDirectMotorCmds(
-            int16_t upper_rotor_pct,    /**< [in] PWM command percentage (0-100) for main rotor (upper) */
-            int16_t lower_rotor_pct,    /**< [in] PWM command percentage (0-100) for main rotor (lower) */
-            int16_t tail_rotor_pct      /**< [in] PWM command percentage and direction (-100 ~ 100) for tail rotor */
+            rotor_cmds_t cmds
         );
 
     private:

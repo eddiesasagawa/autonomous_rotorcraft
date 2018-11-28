@@ -50,7 +50,7 @@ void Arc::Spin() {
                                 tail_cmd = 100;
                             }
                             logger_->info("updating tail cmd to {}", tail_cmd);
-                            controller_.InputDirectMotorCmds(0,0,tail_cmd);
+                            controller_.InputDirectMotorCmds({0,0,tail_cmd});
                             break;
                         }
 
@@ -62,7 +62,7 @@ void Arc::Spin() {
                                 tail_cmd = -100;
                             }
                             logger_->info("updating tail cmd to {}", tail_cmd);
-                            controller_.InputDirectMotorCmds(0,0,tail_cmd);
+                            controller_.InputDirectMotorCmds({0,0,tail_cmd});
                             break;
                         }
 
