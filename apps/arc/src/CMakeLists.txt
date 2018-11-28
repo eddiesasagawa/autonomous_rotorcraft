@@ -29,7 +29,7 @@ find_package(cppzmq HINTS ${CPPZMQ_BUILD_PATH})
 # find_package(cppzmq PATHS ${RPI_SYSROOT}/usr/share/cmake/cppzmq)
 
 if(NOT cppzmq_FOUND)
-    message(STATUS "cppzmq library not found")
+  message(STATUS "cppzmq library not found")
 endif()
 
 #### SPDLOG
@@ -49,32 +49,32 @@ set(ARC_COMMON_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../common)
 message(STATUS "Showing current source: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 include_directories(
-    ${ARC_COMMON_DIR}/interfaces
-    ${ARC_COMMON_DIR}/msg
+  ${ARC_COMMON_DIR}/interfaces
+  ${ARC_COMMON_DIR}/msg
 )
-set(ARC_COMMON_SRC 
-    ${ARC_COMMON_DIR}/interfaces/arc_host_interface.cc 
-    ${ARC_COMMON_DIR}/interfaces/arc_errors.cc
-    ${ARC_COMMON_DIR}/msg/arc_host_msg.cc
+set(ARC_COMMON_SRC
+  ${ARC_COMMON_DIR}/interfaces/arc_host_interface.cc
+  ${ARC_COMMON_DIR}/interfaces/arc_errors.cc
+  ${ARC_COMMON_DIR}/msg/arc_host_msg.cc
 )
 
 # ARC sources
 set(ARC_SRC_APP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/app)
 set(ARC_SRC_APP
-    ${ARC_SRC_APP_DIR}/arc.cc
-    ${ARC_SRC_APP_DIR}/arc2host_interface.cc
-    ${ARC_SRC_APP_DIR}/arc_control.cc
+  ${ARC_SRC_APP_DIR}/arc.cc
+  ${ARC_SRC_APP_DIR}/arc2host_interface.cc
+  ${ARC_SRC_APP_DIR}/arc_control.cc
 )
 
 set(ARC_SRC_BSP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bsp)
 set(ARC_SRC_BSP
-    ${ARC_SRC_BSP_DIR}/gpio_base.cc
-    ${ARC_SRC_BSP_DIR}/motor.cc
+  ${ARC_SRC_BSP_DIR}/gpio_base.cc
+  ${ARC_SRC_BSP_DIR}/motor.cc
 )
 
 include_directories(
-    ${ARC_SRC_APP_DIR}
-    ${ARC_SRC_BSP_DIR}
+  ${ARC_SRC_APP_DIR}
+  ${ARC_SRC_BSP_DIR}
 )
 
 # compiler/linker flags
@@ -95,10 +95,10 @@ include_directories(
 
 # Executable
 add_executable(arc
-    main.cc
-    ${ARC_COMMON_SRC}
-    ${ARC_SRC_APP}
-    ${ARC_SRC_BSP}
+  main.cc
+  ${ARC_COMMON_SRC}
+  ${ARC_SRC_APP}
+  ${ARC_SRC_BSP}
 )
 target_compile_features(arc PUBLIC cxx_std_11)
 # target_compile_definitions(arc PRIVATE ZMQ_STATIC)

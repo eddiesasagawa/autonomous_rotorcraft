@@ -10,22 +10,23 @@ namespace arc { namespace arc {
  * Because ZMQ requires a single context only, this will be a singleton class
  */
 class Arc2HostInterface : public common::ArcHostInterface {
-    public:
-        /**
-         * Main function to get the singleton instance
-         */
-        static Arc2HostInterface& GetInstance();
+ public:
+  /**
+   * Main function to get the singleton instance
+   */
+  static Arc2HostInterface& GetInstance();
 
-        virtual zmq::socket_t* rx_socket() override;
-        virtual zmq::socket_t* tx_socket() override;
-    private:
-        /**
-         * Private constructor to initialize member variables
-         */
-        Arc2HostInterface();
-        
-        zmq::socket_t  rx_socket_;
-        zmq::socket_t  tx_socket_;
+  virtual zmq::socket_t* rx_socket() override;
+  virtual zmq::socket_t* tx_socket() override;
+
+ private:
+  /**
+   * Private constructor to initialize member variables
+   */
+  Arc2HostInterface();
+
+  zmq::socket_t  rx_socket_;
+  zmq::socket_t  tx_socket_;
 };
 
 } } // arc::arc

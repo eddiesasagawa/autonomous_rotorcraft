@@ -7,19 +7,19 @@
 namespace arc { namespace arc {
 
 class ControlSystem {
-    public:
-        ControlSystem();
-        ~ControlSystem();
+ public:
+  ControlSystem();
+  ~ControlSystem();
 
-        void InputDirectMotorCmds(
-            rotor_cmds_t cmds
-        );
+  void InputDirectMotorCmds(
+    rotor_cmds_t cmds
+  );
 
-    private:
-        bsp::BidirectionalMotor tail_rotor_;
+ private:
+  bsp::BidirectionalMotor tail_rotor_;
 
-        static const uint16_t kTailDirectionPin = 16;
-        static const uint16_t kTailPwmPin = 26;
+  static const uint16_t kTailDirectionPin = 16;
+  static const uint16_t kTailPwmPin = 26;
 };
 
 }} //arc::arc

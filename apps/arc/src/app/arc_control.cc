@@ -10,8 +10,8 @@ ControlSystem::ControlSystem()
 ControlSystem::~ControlSystem() {}
 
 void ControlSystem::InputDirectMotorCmds(rotor_cmds_t cmds) {
-    /* Command tail rotor */
-    tail_rotor_.SetMotorCmd(cmds.pct_tail);
+  /* Command tail rotor */
+  tail_rotor_.SetMotorCmd(cmds.pct_tail);
 }
 
 }}
