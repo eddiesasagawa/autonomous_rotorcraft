@@ -125,7 +125,7 @@ common::ArcErrorCodes BidirectionalMotor::SetMotorCmd(
   }
 
   prev_cmd_pct_ = cmd_pct;
-  return common::kArcErrorNone; //SetPWM(abs(cmd_pct));
+  return SetPWM(abs(cmd_pct));
 }
 
 }}} //arc::arc::bsp
