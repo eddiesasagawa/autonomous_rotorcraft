@@ -64,6 +64,7 @@ set(ARC_SRC_APP
   ${ARC_SRC_APP_DIR}/arc.cc
   ${ARC_SRC_APP_DIR}/arc2host_interface.cc
   ${ARC_SRC_APP_DIR}/arc_control.cc
+  ${ARC_SRC_APP_DIR}/gnc_autopilot.cc
 )
 
 set(ARC_SRC_BSP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bsp)

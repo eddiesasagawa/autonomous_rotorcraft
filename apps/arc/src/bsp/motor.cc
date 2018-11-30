@@ -19,7 +19,7 @@ Motor::Motor(
   ));
 
   /* Set frequency */
-  int pwm_freq_hz = gpioSetPWMfrequency(pwm_pin_id_, 2000);
+  int pwm_freq_hz = gpioSetPWMfrequency(pwm_pin_id_, 500);
   common::Log::PrintOnError(
       logger_, __FILE__, __LINE__,
       MapReturnCode(pwm_freq_hz)

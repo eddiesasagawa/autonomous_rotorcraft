@@ -49,8 +49,8 @@ class UnidirectionalMotor : public Motor {
 class BidirectionalMotor : public Motor {
  public:
   enum Direction {
-    kMotorDirPositive = 0,
-    kMotorDirNegative = 1
+    kMotorDirNegative = 0,
+    kMotorDirPositive = 1
   };
 
   BidirectionalMotor(

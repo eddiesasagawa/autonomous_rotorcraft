@@ -44,17 +44,21 @@ class AutopilotSelfTest : public AutopilotBase {
   rotor_cmds_t Step(double t_now) override;
 
  private:
-  static const float kInitialPhaseDuration = 5.0;
-  static const int kInitialMainRotorEndCmd = 20;      /**< 30% pwm at end of initial phase */
-  static const int kUpperRotorDeltaCmdPerSec = 10;
-  static const int kLowerRotorDeltaCmdPerSec = 10;
-  static const int kTailRotorDeltaCmdPerSec = 20;
+  static const float kInitialPhaseDuration;
+  static const int kInitialMainRotorEndCmd;      /**< 30% pwm at end of initial phase */
+  static const int kUpperRotorDeltaCmdPerSec;
+  static const int kLowerRotorDeltaCmdPerSec;
+  static const int kTailRotorDeltaCmdPerSec;
 
   enum SelfTestPhase {
     kSelfTestInitialPhase = 0,
-    kSelfTestUpperRotorPhase,
-    kSelfTestLowerRotorPhase,
-    kSelfTestTailRotorPhase,
+    kSelfTestUpperRotorPhaseUp,
+    kSelfTestUpperRotorPhaseDown,
+    kSelfTestLowerRotorPhaseUp,
+    kSelfTestLowerRotorPhaseDown,
+    kSelfTestTailRotorPhaseUp,
+    kSelfTestTailRotorPhaseDown,
+    kSelfTestReset,
     kSelfTestDone
   };
 

@@ -18,8 +18,8 @@ class ControlSystem {
  private:
   bsp::BidirectionalMotor tail_rotor_;
 
-  static const uint16_t kTailDirectionPin = 16;
-  static const uint16_t kTailPwmPin = 26;
+  static const uint16_t kTailDirectionPin = 26;
+  static const uint16_t kTailPwmPin = 16;
 };
 
 }} //arc::arc
