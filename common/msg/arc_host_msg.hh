@@ -77,6 +77,10 @@ struct AHICommandMessage : AHIMessage {
             kAhiCmdTurnRight,
             kAhiCmdPitchForward,
             kAhiCmdPitchBack,
+            kAhiCmdUpperRotorUp,
+            kAhiCmdUpperRotorDown,
+            kAhiCmdLowerRotorUp,
+            kAhiCmdLowerRotorDown,
             kAhiCmdQuit
         };
 

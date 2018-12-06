@@ -29,8 +29,13 @@ Arc::~Arc() {
 void Arc::Spin() {
   bool quit_now = false;
   bool msg_recvd = false;
+  rotor_cmds_t cmds = {0,0,0};
 
-  int16_t tail_cmd = 0;
+  auto UpdateCmd = [](int16_t &cmd_part, int16_t step) {
+    cmd_part += step;
+    if (cmd_part < -100) { cmd_part = -100; }
+    else if (cmd_part > 100) { cmd_part = 100; }
+  };
 
   /* main loop */
   while (!quit_now) {
@@ -43,26 +48,38 @@ void Arc::Spin() {
 
           switch (p_cmd_msg->command()) {
             case common::AHICommandMessage::kAhiCmdPitchForward: {
-              if (tail_cmd < 100) {
-                tail_cmd += 5;
-              }
-              if (tail_cmd > 100) {
-                tail_cmd = 100;
-              }
-              logger_->info("updating tail cmd to {}", tail_cmd);
-              controller_.InputDirectMotorCmds({0,0,tail_cmd});
+              UpdateCmd(cmds.pct_tail, 5);
+              controller_.InputDirectMotorCmds(cmds);
               break;
             }
 
             case common::AHICommandMessage::kAhiCmdPitchBack: {
-              if (tail_cmd > (-100)) {
-                tail_cmd -= 5;
-              }
-              if (tail_cmd < -100) {
-                tail_cmd = -100;
-              }
-              logger_->info("updating tail cmd to {}", tail_cmd);
-              controller_.InputDirectMotorCmds({0,0,tail_cmd});
+              UpdateCmd(cmds.pct_tail, -5);
+              controller_.InputDirectMotorCmds(cmds);
+              break;
+            }
+
+            case common::AHICommandMessage::kAhiCmdUpperRotorUp: {
+              UpdateCmd(cmds.pct_upper, 5);
+              controller_.InputDirectMotorCmds(cmds);
+              break;
+            }
+
+            case common::AHICommandMessage::kAhiCmdUpperRotorDown: {
+              UpdateCmd(cmds.pct_upper, -5);
+              controller_.InputDirectMotorCmds(cmds);
+              break;
+            }
+
+            case common::AHICommandMessage::kAhiCmdLowerRotorUp: {
+              UpdateCmd(cmds.pct_lower, 5);
+              controller_.InputDirectMotorCmds(cmds);
+              break;
+            }
+
+            case common::AHICommandMessage::kAhiCmdLowerRotorDown: {
+              UpdateCmd(cmds.pct_lower, -5);
+              controller_.InputDirectMotorCmds(cmds);
               break;
             }
 

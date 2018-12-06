@@ -1,6 +1,7 @@
 #include "gnc_autopilot.hh"
 
-namespace arc { namespace arc {
+namespace arc {
+  namespace arc {
 
 AutopilotBase::AutopilotBase(std::string name)
 : t_prev_(0),
@@ -155,4 +156,5 @@ rotor_cmds_t AutopilotTactical::Step(double t_now) {
   return cmd;
 }
 
-}} // arc::arc
+  } // arc::arc
+} // arc

@@ -3,7 +3,8 @@
 
 #include "arc_errors.hh"
 
-namespace arc { namespace arc {
+namespace arc {
+  namespace arc {
 
 struct rotor_cmds_t {
   int16_t pct_upper;  /**< PWM command percentage (0-100) for main rotor (upper) */
@@ -75,6 +76,7 @@ class AutopilotTactical : public AutopilotBase {
   rotor_cmds_t Step(double t_now) override;
 };
 
-}} // arc::arc
+  } // arc::arc
+} //arc
 
 #endif //ARC_GNC_AUTOPILOT_HH
