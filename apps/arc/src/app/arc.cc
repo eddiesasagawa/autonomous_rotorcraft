@@ -48,37 +48,37 @@ void Arc::Spin() {
 
           switch (p_cmd_msg->command()) {
             case common::AHICommandMessage::kAhiCmdPitchForward: {
-              UpdateCmd(cmds.pct_tail, 5);
+              UpdateCmd(cmds.pct_tail, 10);
               controller_.InputDirectMotorCmds(cmds);
               break;
             }
 
             case common::AHICommandMessage::kAhiCmdPitchBack: {
-              UpdateCmd(cmds.pct_tail, -5);
+              UpdateCmd(cmds.pct_tail, -10);
               controller_.InputDirectMotorCmds(cmds);
               break;
             }
 
             case common::AHICommandMessage::kAhiCmdUpperRotorUp: {
-              UpdateCmd(cmds.pct_upper, 5);
+              UpdateCmd(cmds.pct_upper, 10);
               controller_.InputDirectMotorCmds(cmds);
               break;
             }
 
             case common::AHICommandMessage::kAhiCmdUpperRotorDown: {
-              UpdateCmd(cmds.pct_upper, -5);
+              UpdateCmd(cmds.pct_upper, -10);
               controller_.InputDirectMotorCmds(cmds);
               break;
             }
 
             case common::AHICommandMessage::kAhiCmdLowerRotorUp: {
-              UpdateCmd(cmds.pct_lower, 5);
+              UpdateCmd(cmds.pct_lower, 10);
               controller_.InputDirectMotorCmds(cmds);
               break;
             }
 
             case common::AHICommandMessage::kAhiCmdLowerRotorDown: {
-              UpdateCmd(cmds.pct_lower, -5);
+              UpdateCmd(cmds.pct_lower, -10);
               controller_.InputDirectMotorCmds(cmds);
               break;
             }

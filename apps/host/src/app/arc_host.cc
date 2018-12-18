@@ -33,34 +33,34 @@ void ArcHost::Spin() {
   bool quit_now = false;
 
   /* register some callbacks to user interface */
-  user_if_.AddCallback('a', [&](){
+  user_if_.AddCallback('w', [&](){
     common::AHICommandMessage msg(common::AHICommandMessage::kAhiCmdUpperRotorUp);
     logger_->debug("commanding upper rotor up.");
     h2ai_.Send(&msg);
   });
-  user_if_.AddCallback('z', [&](){
+  user_if_.AddCallback('s', [&](){
     common::AHICommandMessage msg(common::AHICommandMessage::kAhiCmdUpperRotorDown);
     logger_->debug("commanding upper rotor down.");
     h2ai_.Send(&msg);
   });
 
-  user_if_.AddCallback('s', [&](){
+  user_if_.AddCallback('e', [&](){
     common::AHICommandMessage msg(common::AHICommandMessage::kAhiCmdLowerRotorUp);
     logger_->debug("commanding lower rotor up.");
     h2ai_.Send(&msg);
   });
-  user_if_.AddCallback('x', [&](){
+  user_if_.AddCallback('d', [&](){
     common::AHICommandMessage msg(common::AHICommandMessage::kAhiCmdLowerRotorDown);
     logger_->debug("commanding lower rotor down.");
     h2ai_.Send(&msg);
   });
 
-  user_if_.AddCallback('d', [&](){
+  user_if_.AddCallback('r', [&](){
     common::AHICommandMessage msg(common::AHICommandMessage::kAhiCmdPitchForward);
     logger_->debug("commanding pitch fwd.");
     h2ai_.Send(&msg);
   });
-  user_if_.AddCallback('c', [&](){
+  user_if_.AddCallback('f', [&](){
     common::AHICommandMessage msg(common::AHICommandMessage::kAhiCmdPitchBack);
     logger_->debug("commanding pitch back.");
     h2ai_.Send(&msg);
