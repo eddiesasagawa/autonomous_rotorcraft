@@ -12,7 +12,7 @@ typedef std::shared_ptr<spdlog::logger> shared_log_ptr_t;
 enum ArcErrorCodes {
     /* No error */
     kArcErrorNone = 0,
-    
+
     /* GPIO errors */
     kArcErrorGpioBadPinInput,
     kArcErrorGpioBadPin,
@@ -20,6 +20,16 @@ enum ArcErrorCodes {
     kArcErrorGpioBadPwmRange,
     kArcErrorGpioBadPwmCommand,
     kArcErrorGpioBadLevel,
+
+    /* SPI errors */
+    kArcErrorSpiBadChannel,
+    kArcErrorSpiBadSpeed,
+    kArcErrorSpiBadFlags,
+    kArcErrorSpiNoAuxSpi,
+    kArcErrorSpiOpenFailed,
+    kArcErrorSpiBadHandle,
+    kArcErrorSpiBadCount,
+    kArcErrorSpiXferFailed,
 
     /* For book keeping */
     kArcErrorUnknownCode,
