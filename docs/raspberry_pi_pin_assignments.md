@@ -17,3 +17,12 @@ Physical Pin  | BCM Pin | Usage
       33      |   13    |   PWM1 -> main rotor 2 PWM
       36      |   16    |   GPIO Output -> soft PWM for tail rotor
       37      |   26    |   GPIO Output -> tail rotor Direction
+
+The chips:
+==========
+- Adafruit Powerboost 1000C
+- N-channel power MOSFET x2
+- Lithium Ion Polymer Battery - 3.7v 2500mAh
+- DRV8835 Dual Motor Driver Carrier
+- LSM6DS33 3D Accelerometer and Gyro Carrier with Voltage Regulator
+- LIS3MDL 3-Axis Magnetometer Carrier with Voltage Regulator
