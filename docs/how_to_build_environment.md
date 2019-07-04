@@ -62,16 +62,16 @@ except using pigpio instead of wiringPi
 
 Set up ZeroMQ for Raspberry Pi
 ------------------------------
-Took a little bit of work, but some references: 
+Took a little bit of work, but some references:
 https://sappo.github.io/2016/10/13/Cross-compiling-for-the-Raspberry-Pi/
 https://raspberrypi.stackexchange.com/questions/6761/cross-compiling-missing-packages
 http://www.kaizou.org/2014/11/typical-cmake-project/
 
-- I chose to clone to my raspberry-pi-tools folder (where tools and pigpio reside): 
+- I chose to clone to my raspberry-pi-tools folder (where tools and pigpio reside):
     $ cd ~/raspberry-pi-tools
-- Clone libzmq: 
+- Clone libzmq:
     $ git clone https://github.com/zeromq/libzmq
-- Clone cppzmq: 
+- Clone cppzmq:
     $ git clone https://github.com/zeromq/cppzmq.git
 
 - First install libzmq via cmake, per cppzmq build instructions:
@@ -117,3 +117,15 @@ To execute on Raspberry Pi
 For now, since static libraries are not working, need to provide library path
 Also need sudo for pigpio
 $ sudo LD_LIBRARY_PATH=/usr/local/lib <path/to/arc>/arc
+
+Compiling ARC-HOST
+==================
+$ cd apps/host
+$ mkdir build && cd build (remove existing if exists)
+$ cmake ..
+$ make
+The compiled object 'arc_host' will reside in build/src
+
+To execute arc_host
+-------------------
+$ build/src/arc_host
