@@ -33,6 +33,19 @@ void ArcHost::Spin() {
   bool quit_now = false;
 
   /* register some callbacks to user interface */
+  user_if_.AddCallback('?', [&](){
+    /* TODO - Auto-generate the help list based on added callbacks */
+    logger_->info("Available Commands: ");
+    logger_->info("\t x - terminate host");
+    logger_->info("\t w - upper rotor up");
+    logger_->info("\t s - upper rotor down");
+    logger_->info("\t e - lower rotor up");
+    logger_->info("\t d - lower rotor down");
+    logger_->info("\t r - pitch fwd");
+    logger_->info("\t f - pitch back");
+    logger_->info("\t q - ARC terminate");
+  });
+
   user_if_.AddCallback('w', [&](){
     common::AHICommandMessage msg(common::AHICommandMessage::kAhiCmdUpperRotorUp);
     logger_->debug("commanding upper rotor up.");
