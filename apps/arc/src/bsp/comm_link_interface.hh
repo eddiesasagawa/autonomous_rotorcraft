@@ -46,7 +46,6 @@ class SPIInterface : public CommLinkInterface, public GpioBase {
     uint8_t channel;
     uint32_t baud;
     union {
-      uint32_t flag_set;
       struct {
         uint32_t  mode                    : 2;
         uint32_t  ce0_set_active_high     : 1;
@@ -63,6 +62,7 @@ class SPIInterface : public CommLinkInterface, public GpioBase {
         uint32_t  aux_spi_word_num_bits   : 6;
         uint32_t  spare   : 10;
       } flags;
+      uint32_t flag_set;
     };
   };
 
