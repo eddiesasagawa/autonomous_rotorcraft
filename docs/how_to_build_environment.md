@@ -112,6 +112,10 @@ The compiled object 'arc' will reside in build/src
 You should be able to just scp it over to the raspberry pi and execute it.
 $ scp build/src/arc <rpiuser>@<rpi_ip_addr>:<destination/directory/arc>
 
+Supported additional compile flags
+----------------------------------
+-DNO_ACTUATORS=1 : This will disable motor initialization and disable its use
+
 To execute on Raspberry Pi
 ==========================
 For now, since static libraries are not working, need to provide library path

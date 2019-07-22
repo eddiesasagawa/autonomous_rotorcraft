@@ -101,6 +101,16 @@ add_executable(arc
   ${ARC_SRC_APP}
   ${ARC_SRC_BSP}
 )
+
+if (NOT DEFINED NO_ACTUATORS)
+  message(STATUS "Actuators enabled")
+  set(NO_ACTUATORS 0)
+else()
+  message(STATUS "Actuators disabled")
+endif()
+
+target_compile_definitions(arc PUBLIC NO_ACTUATORS=${NO_ACTUATORS})
+
 target_compile_features(arc PUBLIC cxx_std_11)
 # target_compile_definitions(arc PRIVATE ZMQ_STATIC)
 

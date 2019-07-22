@@ -18,7 +18,7 @@ class Actuators {
   Actuators();
   ~Actuators();
 
-  void InputDirectMotorCmds(
+  virtual void InputDirectMotorCmds(
     rotor_cmds_t cmds
   );
 
@@ -34,6 +34,16 @@ class Actuators {
   static const uint16_t kLowerRotorPwmPin = 13;
 
   common::shared_log_ptr_t logger_;
+};
+
+class DummyActuators : Actuators {
+ public:
+  DummyActuators();
+  ~DummyActuators();
+
+  void InputDirectMotorCmds(
+    rotor_cmds_t cmds
+  ) override;
 };
 
   } //arc::arc

@@ -20,7 +20,13 @@ class AutopilotBase {
  protected:
   double t_prev_;
   double t_start_;
+
+#if NO_ACTUATORS
+#warning "Actuators disabled"
+  DummyActuators actuators_;
+#else
   Actuators actuators_;
+#endif
 
  private:
   common::shared_log_ptr_t logger_;

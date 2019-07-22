@@ -22,5 +22,9 @@ void Actuators::InputDirectMotorCmds(rotor_cmds_t cmds) {
   lower_rotor_.SetMotorCmd(cmds.pct_lower);
 }
 
+DummyActuators::DummyActuators() {}
+DummyActuators::~DummyActuators() {}
+void DummyActuators::InputDirectMotorCmds(rotor_cmds_t cmds) {}
+
   } // arc::arc
 } //arc
