@@ -1,17 +1,22 @@
 #ifndef ARC_CONTROL_HH
 #define ARC_CONTROL_HH
 
-#include "gnc_autopilot.hh"
 #include "motor.hh"
 #include "arc_errors.hh"
 
 namespace arc {
   namespace arc {
 
-class ControlSystem {
+struct rotor_cmds_t {
+  int16_t pct_upper;  /**< PWM command percentage (0-100) for main rotor (upper) */
+  int16_t pct_lower;  /**< PWM command percentage (0-100) for main rotor (lower) */
+  int16_t pct_tail;   /**< PWM command percentage and direction (-100 ~ 100) for tail rotor */
+};
+
+class Actuators {
  public:
-  ControlSystem();
-  ~ControlSystem();
+  Actuators();
+  ~Actuators();
 
   void InputDirectMotorCmds(
     rotor_cmds_t cmds

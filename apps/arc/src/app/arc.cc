@@ -15,7 +15,7 @@ Arc::Arc(
   const char* const dest_port        /**< [in] Port of destination */
 ) : a2hi_(Arc2HostInterface::GetInstance()),
     logger_(common::Log::RetrieveLogger(kLogName)),
-    controller_() {
+    autopilot_(new AutopilotBase()) {
   /* Initialize ARC here */
   logger_->info("initializing.");
   a2hi_.Connect(my_ip_addr, my_port, dest_ip_addr, dest_port);
@@ -49,37 +49,37 @@ void Arc::Spin() {
           switch (p_cmd_msg->command()) {
             case common::AHICommandMessage::kAhiCmdPitchForward: {
               UpdateCmd(cmds.pct_tail, 10);
-              controller_.InputDirectMotorCmds(cmds);
+              autopilot_->BypassToMotors(cmds);
               break;
             }
 
             case common::AHICommandMessage::kAhiCmdPitchBack: {
               UpdateCmd(cmds.pct_tail, -10);
-              controller_.InputDirectMotorCmds(cmds);
+              autopilot_->BypassToMotors(cmds);
               break;
             }
 
             case common::AHICommandMessage::kAhiCmdUpperRotorUp: {
               UpdateCmd(cmds.pct_upper, 10);
-              controller_.InputDirectMotorCmds(cmds);
+              autopilot_->BypassToMotors(cmds);
               break;
             }
 
             case common::AHICommandMessage::kAhiCmdUpperRotorDown: {
               UpdateCmd(cmds.pct_upper, -10);
-              controller_.InputDirectMotorCmds(cmds);
+              autopilot_->BypassToMotors(cmds);
               break;
             }
 
             case common::AHICommandMessage::kAhiCmdLowerRotorUp: {
               UpdateCmd(cmds.pct_lower, 10);
-              controller_.InputDirectMotorCmds(cmds);
+              autopilot_->BypassToMotors(cmds);
               break;
             }
 
             case common::AHICommandMessage::kAhiCmdLowerRotorDown: {
               UpdateCmd(cmds.pct_lower, -10);
-              controller_.InputDirectMotorCmds(cmds);
+              autopilot_->BypassToMotors(cmds);
               break;
             }
 

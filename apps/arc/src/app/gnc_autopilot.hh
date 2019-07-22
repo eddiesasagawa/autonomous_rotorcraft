@@ -2,26 +2,25 @@
 #define ARC_GNC_AUTOPILOT_HH
 
 #include "arc_errors.hh"
+#include "arc_actuators.hh"
 
 namespace arc {
   namespace arc {
 
-struct rotor_cmds_t {
-  int16_t pct_upper;  /**< PWM command percentage (0-100) for main rotor (upper) */
-  int16_t pct_lower;  /**< PWM command percentage (0-100) for main rotor (lower) */
-  int16_t pct_tail;   /**< PWM command percentage and direction (-100 ~ 100) for tail rotor */
-};
-
 class AutopilotBase {
  public:
+  AutopilotBase();
   AutopilotBase(std::string name);
   ~AutopilotBase();
 
   virtual rotor_cmds_t Step(double t_now);
 
+  void BypassToMotors(rotor_cmds_t cmds);
+
  protected:
   double t_prev_;
   double t_start_;
+  Actuators actuators_;
 
  private:
   common::shared_log_ptr_t logger_;

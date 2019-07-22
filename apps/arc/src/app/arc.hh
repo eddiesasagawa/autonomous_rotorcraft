@@ -1,8 +1,10 @@
 #ifndef ARC_ARC_HH
 #define ARC_ARC_HH
 
+#include<memory>
+
 #include "arc2host_interface.hh"
-#include "arc_control.hh"
+#include "gnc_autopilot.hh"
 #include "arc_errors.hh"
 
 namespace arc { namespace arc {
@@ -33,7 +35,7 @@ class Arc {
   Arc2HostInterface& a2hi_;
   common::shared_log_ptr_t logger_;
 
-  ControlSystem controller_;
+  std::unique_ptr<AutopilotBase> autopilot_;
 
   static const std::string kLogName;
 };

@@ -3,9 +3,19 @@
 namespace arc {
   namespace arc {
 
+AutopilotBase::AutopilotBase()
+: t_prev_(0),
+  t_start_(0),
+  actuators_(),
+  logger_(common::Log::RetrieveLogger("autopilot"))
+{
+
+}
+
 AutopilotBase::AutopilotBase(std::string name)
 : t_prev_(0),
   t_start_(0),
+  actuators_(),
   logger_(common::Log::RetrieveLogger(name))
 {
 
@@ -16,6 +26,10 @@ AutopilotBase::~AutopilotBase() {}
 rotor_cmds_t AutopilotBase::Step(double t_now) {
   rotor_cmds_t cmd = {0,0,0};
   return cmd;
+}
+
+void AutopilotBase::BypassToMotors(rotor_cmds_t cmds) {
+  actuators_.InputDirectMotorCmds(cmds);
 }
 
 /*****************************************************************************************/
