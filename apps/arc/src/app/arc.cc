@@ -15,7 +15,8 @@ Arc::Arc(
   const char* const dest_port        /**< [in] Port of destination */
 ) : a2hi_(Arc2HostInterface::GetInstance()),
     logger_(common::Log::RetrieveLogger(kLogName)),
-    autopilot_(new AutopilotBase()) {
+    autopilot_(new AutopilotBase()),
+    imu_(bsp::ST_6DOFImu_LSM6DS33()) {
   /* Initialize ARC here */
   logger_->info("initializing.");
   a2hi_.Connect(my_ip_addr, my_port, dest_ip_addr, dest_port);
@@ -47,6 +48,11 @@ void Arc::Spin() {
           auto p_cmd_msg = std::static_pointer_cast<common::AHICommandMessage>(p_msg);
 
           switch (p_cmd_msg->command()) {
+            case common::AHICommandMessage::kAhiCmdStatus: {
+              imu_.Query();
+              break;
+            }
+
             case common::AHICommandMessage::kAhiCmdPitchForward: {
               UpdateCmd(cmds.pct_tail, 10);
               autopilot_->BypassToMotors(cmds);

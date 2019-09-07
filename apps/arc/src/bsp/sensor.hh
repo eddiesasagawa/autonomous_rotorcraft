@@ -151,7 +151,7 @@ class ST_6DOFImu_LSM6DS33 : public Sensor, public SPIInterface {
   };
 
   inline uint8_t MakeCommandByte(RegisterMap reg_addr, bool do_read) {
-    return ((uint8_t) reg_addr) | (do_read & 0x01);
+    return ((uint8_t) reg_addr) | ((do_read & 0x01) << 7);
   };
 
   uint8_t ReadAddress(RegisterMap reg_addr);

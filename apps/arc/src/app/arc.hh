@@ -5,6 +5,7 @@
 
 #include "arc2host_interface.hh"
 #include "gnc_autopilot.hh"
+#include "sensor.hh"
 #include "arc_errors.hh"
 
 namespace arc { namespace arc {
@@ -36,6 +37,8 @@ class Arc {
   common::shared_log_ptr_t logger_;
 
   std::unique_ptr<AutopilotBase> autopilot_;
+
+  bsp::ST_6DOFImu_LSM6DS33 imu_;
 
   static const std::string kLogName;
 };

@@ -71,6 +71,7 @@ struct AHICommandMessage : AHIMessage {
     public:
         enum CommandTypes {
             kAhiNullCmd,
+            kAhiCmdStatus,
             kAhiCmdMoreThrust,
             kAhiCmdLessThrust,
             kAhiCmdTurnLeft,

@@ -56,9 +56,8 @@ common::ArcErrorCodes SPIInterface::Communicate(
   char* const rx_data,
   const uint16_t num_bytes
 ) {
-  common::ArcErrorCodes err_code = MapReturnCode(
-    spiXfer(spi_handle_, tx_data, rx_data, num_bytes)
-  );
+  int ret = spiXfer(spi_handle_, tx_data, rx_data, num_bytes);
+  common::ArcErrorCodes err_code = MapReturnCode(ret);
   common::Log::PrintOnError(logger_, __FILE__, __LINE__, err_code);
   return err_code;
 }

@@ -63,13 +63,14 @@ ST_6DOFImu_LSM6DS33::ST_6DOFImu_LSM6DS33()
 ST_6DOFImu_LSM6DS33::~ST_6DOFImu_LSM6DS33() {}
 
 void ST_6DOFImu_LSM6DS33::Query() {
-
+  logger_->info("Query sensor version: {:02x}", ReadAddress(kLSM6DS33Addr_WHO_AM_I));
 }
 
 uint8_t ST_6DOFImu_LSM6DS33::ReadAddress(ST_6DOFImu_LSM6DS33::RegisterMap reg_addr) {
   uint8_t read_buf[2] = {0xFF, 0xFF};
   uint8_t tx_buf[2] = {MakeCommandByte(reg_addr, true), 0};
-  Communicate((char *)tx_buf, (char *)read_buf, 1);
+  Communicate((char *)tx_buf, (char *)read_buf, 2);
+  // logger_->info("ReadAddress: cmd-{:02x},{:02x}  rx-{:02x},{:02x}", tx_buf[0], tx_buf[1], read_buf[0], read_buf[1]);
   return read_buf[1];
 }
     } //arc::arc::bsp

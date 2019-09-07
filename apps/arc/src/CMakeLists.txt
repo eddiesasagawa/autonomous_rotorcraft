@@ -69,8 +69,10 @@ set(ARC_SRC_APP
 
 set(ARC_SRC_BSP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bsp)
 set(ARC_SRC_BSP
+  ${ARC_SRC_BSP_DIR}/comm_link_interface.cc
   ${ARC_SRC_BSP_DIR}/gpio_base.cc
   ${ARC_SRC_BSP_DIR}/motor.cc
+  ${ARC_SRC_BSP_DIR}/sensor.cc
 )
 
 include_directories(
