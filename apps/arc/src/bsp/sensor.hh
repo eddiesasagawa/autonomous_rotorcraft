@@ -29,8 +29,8 @@ class ST_6DOFImu_LSM6DS33 : public Sensor, public SPIInterface {
   float GetTemperature();
 
  private:
-  using RegisterMap = st_lsm6ds33::RegisterMap;
-  using DataRegisters = st_lsm6ds33::DataRegisters;
+  using RegisterMap = st_lsm6ds33_defs::RegisterMap;
+  using DataRegisters = st_lsm6ds33_defs::DataRegisters;
 
   inline uint8_t MakeCommandByte(RegisterMap reg_addr, bool do_read) {
     return ((uint8_t) reg_addr) | ((do_read & 0x01) << 7);

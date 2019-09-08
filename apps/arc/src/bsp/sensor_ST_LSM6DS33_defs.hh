@@ -6,7 +6,7 @@
 namespace arc {
   namespace arc {
     namespace bsp {
-      namespace st_lsm6ds33 {
+      namespace st_lsm6ds33_defs {
 
 enum RegisterMap {
   kLSM6DS33Addr_WHO_AM_I = 0x0F,  /* read-only; fixed at 0x69 */
@@ -199,7 +199,7 @@ union DataRegisters {
   uint8_t data[15];
 };
 
-      } // st_lsm6ds33
+      } // st_lsm6ds33_defs
     }
   }
 }

@@ -5,7 +5,7 @@ namespace arc {
     namespace bsp {
 
 /******************************************************/
-using namespace st_lsm6ds33;
+using namespace st_lsm6ds33_defs;
 
 CtrlRegisters::CtrlRegisters()
 : data {
