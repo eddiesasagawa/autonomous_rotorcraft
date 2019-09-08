@@ -8,6 +8,19 @@ Due to possible resource constraints on the onboard processor, visual processing
 
 Since I am most proficient in C and Python, I thought I would switch things up and do the bulk of the software in C++.
 
+Some Rationale
+--------------
+I completely acknowledge that a Raspberry Pi Zero W running Linux instead of an RTOS (and even if it did) might struggle to handle sensor fusion, rotor control, guidance, and still pipe video to the server. In particular, since Raspbian is not a real-time OS, it will be limited in its ability to handle sensor updates and control updates.
+
+Since this is a project on my free time, I wanted to keep things simpler first while still conforming to the small space/weight constraints of the RC helicopter
+
+The next version (if I get to that point) could have some upgrade options:
+- Get a bigger helicopter to hold bigger things
+- With more space, go to a Raspberry Pi 3 with multiple cores
+- Have something like a Teensy 4.0 running an RTOS to do the low-level, high-rate processing like sensor fusion, state estimation, and control. Then have it connect to the Pi0 using UART/SPI/CAN/UDP/whatever to receive higher level guidance
+    - This is probably the first thing I would do
+- Add something like an Nvidia Jetson to do on-board image processing (way in the future stuff)
+
 Apps
 ====
 There are two main software targets:
