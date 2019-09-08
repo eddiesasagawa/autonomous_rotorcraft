@@ -50,6 +50,7 @@ ST_6DOFImu_LSM6DS33::ST_6DOFImu_LSM6DS33()
       }
     }
   ),
+  time_us_lsb_(6400.0),
   raw_data_(DataRegisters()),
   ctrl_settings_(CtrlRegisters())
 {
@@ -94,7 +95,6 @@ CtrlRegisters ST_6DOFImu_LSM6DS33::GrabCtrlSettings() {
   uint8_t tx_buf[sizeof(CtrlRegisters)] = {MakeCommandByte(kLSM6DS33Addr_CTRL1_XL, true), 0};
   Communicate((char *)tx_buf, (char *)(current_settings.data), sizeof(CtrlRegisters));
 
-  // memcpy(&current_settings, read_buf+1, sizeof(CtrlRegisters));
   // logger_->info("IMU CTRL registers:");
   // for (int i = 0; i < 10; i++) {
   //   logger_->info("  CTRL{:02d} = 0x{:02x}", i+1, ctrl_reg_ptr->data[i]);

@@ -45,10 +45,7 @@ class ST_6DOFImu_LSM6DS33 : public Sensor, public SPIInterface {
   };
 
   inline float ConvertInt16ToFloat(int16_t in_val, float lsb) {
-    // int16_t temp = ((~twos_comp_val) + 1);
-    // temp = (temp & 0x8000) ? (temp & 0x7FFF) : (temp | 0x8000);
-    // return ((float)temp) * lsb;
-    return ((float)in_val) / 32768.0 * lsb;
+    return ((float)in_val) * lsb;
   }
 
   uint8_t       ReadAddress(RegisterMap reg_addr);
@@ -58,6 +55,7 @@ class ST_6DOFImu_LSM6DS33 : public Sensor, public SPIInterface {
 
   /* Variables */
   static const uint8_t kIDCode = 0x69;
+  float time_us_lsb_;
   DataRegisters raw_data_;
   CtrlRegisters ctrl_settings_;
 };

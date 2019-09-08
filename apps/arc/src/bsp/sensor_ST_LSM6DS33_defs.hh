@@ -78,6 +78,25 @@ enum GyroscopeDataRate {
   kLSM6DS33_GODR_1660HZ = 8
 };
 
+enum TimestampResolution {
+  kLSM6DS33_TIME_LSB_6400us = 0,
+  kLSM6DS33_TIME_LSB_25us = 1
+};
+
+union DurationSettingsRegister {
+  struct {
+    uint8_t cmd_word_placeholder;
+
+    struct {
+      uint8_t SLEEP_DUR : 4;
+      uint8_t TIMER_HR  : 1;
+      uint8_t WAKE_DUR  : 2;
+      uint8_t FF_DUR5   : 1;
+    } wake_up_dur;
+  } fields;
+  uint8_t data[2];
+};
+
 union CtrlRegisters {
   struct {
     uint8_t cmd_word_placeholder;
@@ -199,8 +218,17 @@ union DataRegisters {
     uint8_t OUTY_H_XL;
     uint8_t OUTZ_L_XL;
     uint8_t OUTZ_H_XL;
+    uint8_t FIFO_STATUS1;
+    uint8_t FIFO_STATUS2;
+    uint8_t FIFO_STATUS3;
+    uint8_t FIFO_STATUS4;
+    uint8_t FIFO_DATA_OUT_L;
+    uint8_t FIFO_DATA_OUT_H;
+    uint8_t TIMESTAMP0_REG;
+    uint8_t TIMESTAMP1_REG;
+    uint8_t TIMESTAMP2_REG;
   } registers;
-  uint8_t data[15+1];
+  uint8_t data[24+1];
 };
 
       } // st_lsm6ds33_defs
