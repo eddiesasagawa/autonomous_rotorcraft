@@ -80,6 +80,8 @@ enum GyroscopeDataRate {
 
 union CtrlRegisters {
   struct {
+    uint8_t cmd_word_placeholder;
+
     struct {
       uint8_t BW_XL : 2;
       uint8_t FS_XL : 2;
@@ -166,13 +168,15 @@ union CtrlRegisters {
       uint8_t reserved        : 2;
     } ctrl_10;
   } registers;
-  uint8_t data[10];
+  uint8_t data[10+1];
 
   CtrlRegisters();
 };
 
 union DataRegisters {
   struct {
+    uint8_t cmd_word_placeholder;
+
     struct {
       uint8_t XLDA    : 1;
       uint8_t GDA     : 1;
@@ -196,7 +200,7 @@ union DataRegisters {
     uint8_t OUTZ_L_XL;
     uint8_t OUTZ_H_XL;
   } registers;
-  uint8_t data[15];
+  uint8_t data[15+1];
 };
 
       } // st_lsm6ds33_defs

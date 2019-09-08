@@ -19,6 +19,7 @@ Arc::Arc(
     imu_(bsp::ST_6DOFImu_LSM6DS33()) {
   /* Initialize ARC here */
   logger_->info("initializing.");
+  logger_->set_level(spdlog::level::debug);
   a2hi_.Connect(my_ip_addr, my_port, dest_ip_addr, dest_port);
 }
 
