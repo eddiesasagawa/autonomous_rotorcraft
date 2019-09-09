@@ -51,13 +51,14 @@ ST_6DOFImu_LSM6DS33::ST_6DOFImu_LSM6DS33()
     }
   ),
   time_us_lsb_(6400.0),
+  raw_time_(TimeRegisters()),
   raw_data_(DataRegisters()),
   ctrl_settings_(CtrlRegisters())
 {
   logger_->set_level(spdlog::level::debug);
 
   /* Query the sensor for version */
-  logger_->info("Query sensor version: 0x{:02x}", ReadAddress(kLSM6DS33Addr_WHO_AM_I));
+  logger_->info("Query sensor version: 0x{:02x}", ReadRegister(kLSM6DS33Addr_WHO_AM_I));
 
   /* Read back the default settings and set new ones */
   ctrl_settings_ = GrabCtrlSettings();
@@ -67,39 +68,44 @@ ST_6DOFImu_LSM6DS33::ST_6DOFImu_LSM6DS33()
   ctrl_settings_.registers.ctrl_2.ODR_G = kLSM6DS33_GODR_104HZ;
   // ctrl_settings_.registers.ctrl_3.BDU = 0; // enable Block Data update (don't update until both MSB and LSB are ready)
   LoadCtrlSettings(ctrl_settings_);
+
+  /* Enable the timestamp */
+  TapConfigRegister tap_cfg = {0};
+  tap_cfg.TAP_CFG.TIMER_EN = 1;
+  WriteRegister(kLSM6DS33Addr_TAP_CFG, tap_cfg.byte);
+  /* Reset the timer */
+  WriteRegister(kLSM6DS33Addr_TIMESTAMP2, 0xAA);
 }
 
 ST_6DOFImu_LSM6DS33::~ST_6DOFImu_LSM6DS33() {}
 
 void ST_6DOFImu_LSM6DS33::Query() {
-  logger_->info("Query sensor version: 0x{:02x}", ReadAddress(kLSM6DS33Addr_WHO_AM_I));
-
   /* Read IMU data */
   GrabData();
 
-  logger_->info("Temperature: {:02.3f} degC", temperature);
-  logger_->info("Accelerometer: < {:03.6f}, {:03.6f}, {:03.6f} > mm/s^2", f_imx_m, f_imy_m, f_imz_m);
-  logger_->info("Gyroscope: < {:03.6f}, {:03.6f}, {:03.6f} > mdeg/s", omega_imx_m, omega_imy_m, omega_imz_m);
+  logger_->info("Time: {:f} s", time_valid);
+  logger_->info("Temperature: {:02.3f} degrees C", temperature);
+  logger_->info("Accelerometer: < {:03.6f}, {:03.6f}, {:03.6f} > m/s^2", f_imx_m, f_imy_m, f_imz_m);
+  logger_->info("Gyroscope: < {:03.6f}, {:03.6f}, {:03.6f} > rad/s", omega_imx_m, omega_imy_m, omega_imz_m);
 }
 
-uint8_t ST_6DOFImu_LSM6DS33::ReadAddress(ST_6DOFImu_LSM6DS33::RegisterMap reg_addr) {
+uint8_t ST_6DOFImu_LSM6DS33::ReadRegister(ST_6DOFImu_LSM6DS33::RegisterMap reg_addr) {
   uint8_t read_buf[2] = {0xFF, 0xFF};
   uint8_t tx_buf[2] = {MakeCommandByte(reg_addr, true), 0};
   Communicate((char *)tx_buf, (char *)read_buf, 2);
-  // logger_->info("ReadAddress: cmd-{:02x},{:02x}  rx-{:02x},{:02x}", tx_buf[0], tx_buf[1], read_buf[0], read_buf[1]);
+  // logger_->info("ReadRegister: cmd-{:02x},{:02x}  rx-{:02x},{:02x}", tx_buf[0], tx_buf[1], read_buf[0], read_buf[1]);
   return read_buf[1];
+}
+
+void ST_6DOFImu_LSM6DS33::WriteRegister(RegisterMap reg_addr, uint8_t new_val){
+  uint8_t tx_buf[2] = {MakeCommandByte(reg_addr, false), new_val};
+  Transmit((char *)tx_buf, 2);
 }
 
 CtrlRegisters ST_6DOFImu_LSM6DS33::GrabCtrlSettings() {
   CtrlRegisters current_settings = CtrlRegisters();
   uint8_t tx_buf[sizeof(CtrlRegisters)] = {MakeCommandByte(kLSM6DS33Addr_CTRL1_XL, true), 0};
   Communicate((char *)tx_buf, (char *)(current_settings.data), sizeof(CtrlRegisters));
-
-  // logger_->info("IMU CTRL registers:");
-  // for (int i = 0; i < 10; i++) {
-  //   logger_->info("  CTRL{:02d} = 0x{:02x}", i+1, ctrl_reg_ptr->data[i]);
-  // }
-
   return current_settings;
 }
 
@@ -110,13 +116,19 @@ void ST_6DOFImu_LSM6DS33::LoadCtrlSettings(CtrlRegisters new_settings) {
 
 void ST_6DOFImu_LSM6DS33::GrabData() {
   float imu_scale = 0;
-  uint8_t tx_buf[sizeof(DataRegisters)] = {MakeCommandByte(kLSM6DS33Addr_STATUS_REG, true), 0};
-  Communicate((char *)tx_buf, (char *)(raw_data_.data), sizeof(DataRegisters)+1);
+  uint8_t tx_buf[sizeof(DataRegisters)] = {MakeCommandByte(kLSM6DS33Addr_OUT_TEMP_L, true), 0};
+  Communicate((char *)tx_buf, (char *)(raw_data_.data), sizeof(DataRegisters));
+  // PrintByteArray(raw_data_.data, sizeof(DataRegisters), 1, kLSM6DS33Addr_OUT_TEMP_L-1);
 
-  // logger_->info("IMU data registers:");
-  // for (int i = 1; i < 16; i++) {
-  //   logger_->info("  {:02d} = 0x{:02x}", i, raw_data_.data[i]);
-  // }
+  tx_buf[0] = MakeCommandByte(kLSM6DS33Addr_TIMESTAMP0, true);
+  Communicate((char *)tx_buf, (char *)(raw_time_.data), sizeof(TimeRegisters));
+  // PrintByteArray(raw_time_.data, sizeof(TimeRegisters), 1, kLSM6DS33Addr_TIMESTAMP0-1);
+
+  /* Time */
+  time_valid = time_us_lsb_ * (double)((((uint32_t)raw_time_.registers.TIMESTAMP2_REG) << 16)
+                                    | (((uint32_t)raw_time_.registers.TIMESTAMP1_REG) << 8)
+                                    | (((uint32_t)raw_time_.registers.TIMESTAMP0_REG)));
+  time_valid /= 1000000; // convert to seconds
 
   /* Temperature: signed 2's complement */
   temperature = 25.0 + ConvertInt16ToFloat(
@@ -141,14 +153,13 @@ void ST_6DOFImu_LSM6DS33::GrabData() {
         break;
     }
   }
-  logger_->debug("gyro lsb = {:f}", imu_scale);
-  omega_imx_m = ConvertInt16ToFloat(
+  omega_imx_m = (3.14/180.0/1000.0)* ConvertInt16ToFloat(
     (((int16_t)raw_data_.registers.OUTX_H_G) << 8) | ((int16_t)raw_data_.registers.OUTX_L_G),
     imu_scale);
-  omega_imy_m = ConvertInt16ToFloat(
+  omega_imy_m = (3.14/180.0/1000.0)* ConvertInt16ToFloat(
     (((int16_t)raw_data_.registers.OUTY_H_G) << 8) | ((int16_t)raw_data_.registers.OUTY_L_G),
     imu_scale);
-  omega_imz_m = ConvertInt16ToFloat(
+  omega_imz_m = (3.14/180.0/1000.0)* ConvertInt16ToFloat(
     (((int16_t)raw_data_.registers.OUTZ_H_G) << 8) | ((int16_t)raw_data_.registers.OUTZ_L_G),
     imu_scale);
   /* Accelerometer: signed 2's complement */
@@ -166,18 +177,24 @@ void ST_6DOFImu_LSM6DS33::GrabData() {
       imu_scale = 0.488;
       break;
   }
-  logger_->debug("accel lsb = {:f}", imu_scale);
-  f_imx_m = 9.81 * ConvertInt16ToFloat(
+
+  f_imx_m = (9.81/1000.0) * ConvertInt16ToFloat(
     (((int16_t)raw_data_.registers.OUTX_H_XL) << 8) | ((int16_t)raw_data_.registers.OUTX_L_XL),
     imu_scale);
-  f_imy_m = 9.81 * ConvertInt16ToFloat(
+  f_imy_m = (9.81/1000.0) * ConvertInt16ToFloat(
     (((int16_t)raw_data_.registers.OUTY_H_XL) << 8) | ((int16_t)raw_data_.registers.OUTY_L_XL),
     imu_scale);
-  f_imz_m = 9.81 * ConvertInt16ToFloat(
+  f_imz_m = (9.81/1000.0) * ConvertInt16ToFloat(
     (((int16_t)raw_data_.registers.OUTZ_H_XL) << 8) | ((int16_t)raw_data_.registers.OUTZ_L_XL),
     imu_scale);
 }
 
+void ST_6DOFImu_LSM6DS33::PrintByteArray(const uint8_t* const data, uint16_t num_bytes, uint16_t offset, uint8_t start_addr) {
+  logger_->debug("Byte array dump: ");
+  for (uint16_t i = offset; i < num_bytes; i++) {
+    logger_->debug("  {:02X}h = 0x{:02x}", start_addr+i, data[i]);
+  }
+}
 
     } //arc::arc::bsp
   }

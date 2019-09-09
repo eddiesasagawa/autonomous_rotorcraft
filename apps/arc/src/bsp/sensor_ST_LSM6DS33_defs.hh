@@ -35,7 +35,13 @@ enum RegisterMap {
   kLSM6DS33Addr_OUTY_L_XL = 0x2A,
   kLSM6DS33Addr_OUTY_H_XL = 0x2B,
   kLSM6DS33Addr_OUTZ_L_XL = 0x2C,
-  kLSM6DS33Addr_OUTZ_H_XL = 0x2D
+  kLSM6DS33Addr_OUTZ_H_XL = 0x2D,
+
+  kLSM6DS33Addr_TIMESTAMP0 = 0x40,
+  kLSM6DS33Addr_TIMESTAMP1 = 0x41,
+  kLSM6DS33Addr_TIMESTAMP2 = 0x42,
+
+  kLSM6DS33Addr_TAP_CFG = 0x58
 };
 
 enum AccelerometerFullScale {
@@ -83,18 +89,29 @@ enum TimestampResolution {
   kLSM6DS33_TIME_LSB_25us = 1
 };
 
+/**** Register Definitions  ****/
+union TapConfigRegister {
+  struct {
+    uint8_t LIR       : 1;
+    uint8_t TAP_Z_EN  : 1;
+    uint8_t TAP_Y_EN  : 1;
+    uint8_t TAP_X_EN  : 1;
+    uint8_t SLOPE_FDS : 1;
+    uint8_t TILT_EN   : 1;
+    uint8_t PEDO_EN   : 1;
+    uint8_t TIMER_EN  : 1;
+  } TAP_CFG;
+  uint8_t byte;
+};
+
 union DurationSettingsRegister {
   struct {
-    uint8_t cmd_word_placeholder;
-
-    struct {
-      uint8_t SLEEP_DUR : 4;
-      uint8_t TIMER_HR  : 1;
-      uint8_t WAKE_DUR  : 2;
-      uint8_t FF_DUR5   : 1;
-    } wake_up_dur;
-  } fields;
-  uint8_t data[2];
+    uint8_t SLEEP_DUR : 4;
+    uint8_t TIMER_HR  : 1;
+    uint8_t WAKE_DUR  : 2;
+    uint8_t FF_DUR5   : 1;
+  } WAKE_UP_DUR;
+  uint8_t byte;
 };
 
 union CtrlRegisters {
@@ -196,14 +213,6 @@ union DataRegisters {
   struct {
     uint8_t cmd_word_placeholder;
 
-    struct {
-      uint8_t XLDA    : 1;
-      uint8_t GDA     : 1;
-      uint8_t TDA     : 1;
-      uint8_t EV_BOOT : 1;
-      uint8_t reserved: 4;
-    } status;
-
     uint8_t OUT_TEMP_L;
     uint8_t OUT_TEMP_H;
     uint8_t OUTX_L_G;
@@ -218,17 +227,18 @@ union DataRegisters {
     uint8_t OUTY_H_XL;
     uint8_t OUTZ_L_XL;
     uint8_t OUTZ_H_XL;
-    uint8_t FIFO_STATUS1;
-    uint8_t FIFO_STATUS2;
-    uint8_t FIFO_STATUS3;
-    uint8_t FIFO_STATUS4;
-    uint8_t FIFO_DATA_OUT_L;
-    uint8_t FIFO_DATA_OUT_H;
+  } registers;
+  uint8_t data[15];
+};
+
+union TimeRegisters {
+  struct {
+    uint8_t cmd_word_placeholder;
     uint8_t TIMESTAMP0_REG;
     uint8_t TIMESTAMP1_REG;
     uint8_t TIMESTAMP2_REG;
   } registers;
-  uint8_t data[24+1];
+  uint8_t data[4];
 };
 
       } // st_lsm6ds33_defs

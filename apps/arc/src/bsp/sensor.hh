@@ -27,6 +27,7 @@ class ST_6DOFImu_LSM6DS33 : public Sensor, public SPIInterface {
 
   void Query() override;
 
+  double time_valid;
   float temperature;
   float f_imx_m;     // specific force x-dir from accelerometer in sensor frame
   float f_imy_m;     // specific force y-dir from accelerometer in sensor frame
@@ -37,6 +38,7 @@ class ST_6DOFImu_LSM6DS33 : public Sensor, public SPIInterface {
 
  private:
   using RegisterMap = st_lsm6ds33_defs::RegisterMap;
+  using TimeRegisters = st_lsm6ds33_defs::TimeRegisters;
   using DataRegisters = st_lsm6ds33_defs::DataRegisters;
   using CtrlRegisters = st_lsm6ds33_defs::CtrlRegisters;
 
@@ -48,14 +50,18 @@ class ST_6DOFImu_LSM6DS33 : public Sensor, public SPIInterface {
     return ((float)in_val) * lsb;
   }
 
-  uint8_t       ReadAddress(RegisterMap reg_addr);
+  uint8_t       ReadRegister(RegisterMap reg_addr);
+  void          WriteRegister(RegisterMap reg_addr, uint8_t new_val);
   CtrlRegisters GrabCtrlSettings();
   void          LoadCtrlSettings(CtrlRegisters new_settings);
   void          GrabData();
 
+  void          PrintByteArray(const uint8_t* const data, uint16_t num_bytes, uint16_t offset, uint8_t start_addr);
+
   /* Variables */
   static const uint8_t kIDCode = 0x69;
   float time_us_lsb_;
+  TimeRegisters raw_time_;
   DataRegisters raw_data_;
   CtrlRegisters ctrl_settings_;
 };
