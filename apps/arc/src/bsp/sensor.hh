@@ -3,6 +3,7 @@
 
 #include "comm_link_interface.hh"
 #include "sensor_ST_LSM6DS33_defs.hh"
+#include "measurements.hh"
 
 namespace arc {
   namespace arc {
@@ -27,14 +28,7 @@ class ST_6DOFImu_LSM6DS33 : public Sensor, public SPIInterface {
 
   void Query() override;
 
-  double time_valid;
-  float temperature;
-  float f_imx_m;     // specific force x-dir from accelerometer in sensor frame
-  float f_imy_m;     // specific force y-dir from accelerometer in sensor frame
-  float f_imz_m;     // specific force z-dir from accelerometer in sensor frame
-  float omega_imx_m; // angular rate x-dir from gyroscope in sensor frame
-  float omega_imy_m; // angular rate y-dir from gyroscope in sensor frame
-  float omega_imz_m; // angular rate z-dir from gyroscope in sensor frame
+  ImuMeasurements readings;
 
  private:
   using RegisterMap = st_lsm6ds33_defs::RegisterMap;
@@ -44,7 +38,7 @@ class ST_6DOFImu_LSM6DS33 : public Sensor, public SPIInterface {
 
   inline uint8_t MakeCommandByte(RegisterMap reg_addr, bool do_read) {
     return ((uint8_t) reg_addr) | ((do_read & 0x01) << 7);
-  };
+  }
 
   template<typename FP>
   inline FP DecodeInt16(int16_t in_val, float lsb) {

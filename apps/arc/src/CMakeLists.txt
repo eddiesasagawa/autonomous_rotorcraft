@@ -43,6 +43,11 @@ add_subdirectory(${SPDLOG_PATH} ${CMAKE_CURRENT_BINARY_DIR}/spdlog)
 # find_package(spdlog)
 # include_directories(include ${spdlog_LIB})
 
+#### EIGEN
+set(EIGEN3_ROOT $ENV{HOME}/raspberry-pi-tools/Eigen)
+find_package(Eigen3 3.3.4 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
+
 ## Project sources
 # library headers and sources
 set(ARC_COMMON_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../common)

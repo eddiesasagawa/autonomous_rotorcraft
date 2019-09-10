@@ -50,6 +50,7 @@ ST_6DOFImu_LSM6DS33::ST_6DOFImu_LSM6DS33()
       }
     }
   ),
+  readings(ImuMeasurements()),
   time_us_lsb_(6400.0),
   raw_time_(TimeRegisters()),
   raw_data_(DataRegisters()),
@@ -83,10 +84,10 @@ void ST_6DOFImu_LSM6DS33::Query() {
   /* Read IMU data */
   GrabData();
 
-  logger_->info("Time: {:f} s", time_valid);
-  logger_->info("Temperature: {:02.3f} degrees C", temperature);
-  logger_->info("Accelerometer: < {:03.6f}, {:03.6f}, {:03.6f} > m/s^2", f_imx_m, f_imy_m, f_imz_m);
-  logger_->info("Gyroscope: < {:03.6f}, {:03.6f}, {:03.6f} > rad/s", omega_imx_m, omega_imy_m, omega_imz_m);
+  logger_->info("Time: {:f} s", readings.t_valid);
+  logger_->info("Temperature: {:02.3f} degrees C", readings.temperature);
+  logger_->info("Accelerometer: < {:03.6f}, {:03.6f}, {:03.6f} > m/s^2", readings.f_im_m(0), readings.f_im_m(1), readings.f_im_m(2));
+  logger_->info("Gyroscope: < {:03.6f}, {:03.6f}, {:03.6f} > rad/s", readings.omega_im_m(0), readings.omega_im_m(1), readings.omega_im_m(2));
 }
 
 uint8_t ST_6DOFImu_LSM6DS33::ReadRegister(ST_6DOFImu_LSM6DS33::RegisterMap reg_addr) {
@@ -125,13 +126,13 @@ void ST_6DOFImu_LSM6DS33::GrabData() {
   // PrintByteArray(raw_time_.data, sizeof(TimeRegisters), 1, kLSM6DS33Addr_TIMESTAMP0-1);
 
   /* Time */
-  time_valid = time_us_lsb_ * (double)((((uint32_t)raw_time_.registers.TIMESTAMP2_REG) << 16)
+  readings.t_valid = time_us_lsb_ * (double)((((uint32_t)raw_time_.registers.TIMESTAMP2_REG) << 16)
                                     | (((uint32_t)raw_time_.registers.TIMESTAMP1_REG) << 8)
                                     | (((uint32_t)raw_time_.registers.TIMESTAMP0_REG)));
-  time_valid /= 1000000; // convert to seconds
+  readings.t_valid /= 1000000; // convert to seconds
 
   /* Temperature: signed 2's complement */
-  temperature = 25.0 + DecodeInt16<float>(
+  readings.temperature = 25.0 + DecodeInt16<float>(
     (((int16_t)raw_data_.registers.OUT_TEMP_H) << 8) | ((int16_t)raw_data_.registers.OUT_TEMP_L),
     (1.0 / 16.0));
   /* Gyroscope: signed 2's complement */
@@ -153,13 +154,13 @@ void ST_6DOFImu_LSM6DS33::GrabData() {
         break;
     }
   }
-  omega_imx_m = (3.14/180.0/1000.0)* DecodeInt16<float>(
+  readings.omega_im_m(0) = (3.14/180.0/1000.0)* DecodeInt16<float>(
     (((int16_t)raw_data_.registers.OUTX_H_G) << 8) | ((int16_t)raw_data_.registers.OUTX_L_G),
     imu_scale);
-  omega_imy_m = (3.14/180.0/1000.0)* DecodeInt16<float>(
+  readings.omega_im_m(1) = (3.14/180.0/1000.0)* DecodeInt16<float>(
     (((int16_t)raw_data_.registers.OUTY_H_G) << 8) | ((int16_t)raw_data_.registers.OUTY_L_G),
     imu_scale);
-  omega_imz_m = (3.14/180.0/1000.0)* DecodeInt16<float>(
+  readings.omega_im_m(2) = (3.14/180.0/1000.0)* DecodeInt16<float>(
     (((int16_t)raw_data_.registers.OUTZ_H_G) << 8) | ((int16_t)raw_data_.registers.OUTZ_L_G),
     imu_scale);
   /* Accelerometer: signed 2's complement */
@@ -178,13 +179,13 @@ void ST_6DOFImu_LSM6DS33::GrabData() {
       break;
   }
 
-  f_imx_m = (9.81/1000.0) * DecodeInt16<float>(
+  readings.f_im_m(0) = (9.81/1000.0) * DecodeInt16<float>(
     (((int16_t)raw_data_.registers.OUTX_H_XL) << 8) | ((int16_t)raw_data_.registers.OUTX_L_XL),
     imu_scale);
-  f_imy_m = (9.81/1000.0) * DecodeInt16<float>(
+  readings.f_im_m(1) = (9.81/1000.0) * DecodeInt16<float>(
     (((int16_t)raw_data_.registers.OUTY_H_XL) << 8) | ((int16_t)raw_data_.registers.OUTY_L_XL),
     imu_scale);
-  f_imz_m = (9.81/1000.0) * DecodeInt16<float>(
+  readings.f_im_m(2) = (9.81/1000.0) * DecodeInt16<float>(
     (((int16_t)raw_data_.registers.OUTZ_H_XL) << 8) | ((int16_t)raw_data_.registers.OUTZ_L_XL),
     imu_scale);
 }

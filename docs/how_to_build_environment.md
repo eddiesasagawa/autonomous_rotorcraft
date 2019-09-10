@@ -101,6 +101,14 @@ $ mkdir build && cd build
 $ cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain-rpi.cmake -DCMAKE_INSTALL_PREFIX=~/raspberry-pi-tools/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot/usr -DSPDLOG_BUILD_BENCH=OFF -DSPDLOG_BUILD_TESTING=OFF -DSPDLOG_BUILD_EXAMPLES=OFF
 $ make install -j4
 
+EIGEN3
+------
+Use Eigen3 for matrix / linear algebra
+Either use git clone or download a tar of a release version (using v3.3.4 at this time)
+$ cd ~/raspberry-pi-tools
+<use git clone or download a tar of a release version, and extract here>
+Just make sure to update the link in the CMakeLists.txt files if the name of the directory is not "Eigen"
+
 Compiling ARC
 =============
 $ cd apps/arc
