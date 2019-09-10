@@ -46,8 +46,9 @@ class ST_6DOFImu_LSM6DS33 : public Sensor, public SPIInterface {
     return ((uint8_t) reg_addr) | ((do_read & 0x01) << 7);
   };
 
-  inline float ConvertInt16ToFloat(int16_t in_val, float lsb) {
-    return ((float)in_val) * lsb;
+  template<typename FP>
+  inline FP DecodeInt16(int16_t in_val, float lsb) {
+    return ((FP)in_val) * lsb;
   }
 
   uint8_t       ReadRegister(RegisterMap reg_addr);

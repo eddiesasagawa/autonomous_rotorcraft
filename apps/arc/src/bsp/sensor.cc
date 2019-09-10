@@ -131,7 +131,7 @@ void ST_6DOFImu_LSM6DS33::GrabData() {
   time_valid /= 1000000; // convert to seconds
 
   /* Temperature: signed 2's complement */
-  temperature = 25.0 + ConvertInt16ToFloat(
+  temperature = 25.0 + DecodeInt16<float>(
     (((int16_t)raw_data_.registers.OUT_TEMP_H) << 8) | ((int16_t)raw_data_.registers.OUT_TEMP_L),
     (1.0 / 16.0));
   /* Gyroscope: signed 2's complement */
@@ -153,13 +153,13 @@ void ST_6DOFImu_LSM6DS33::GrabData() {
         break;
     }
   }
-  omega_imx_m = (3.14/180.0/1000.0)* ConvertInt16ToFloat(
+  omega_imx_m = (3.14/180.0/1000.0)* DecodeInt16<float>(
     (((int16_t)raw_data_.registers.OUTX_H_G) << 8) | ((int16_t)raw_data_.registers.OUTX_L_G),
     imu_scale);
-  omega_imy_m = (3.14/180.0/1000.0)* ConvertInt16ToFloat(
+  omega_imy_m = (3.14/180.0/1000.0)* DecodeInt16<float>(
     (((int16_t)raw_data_.registers.OUTY_H_G) << 8) | ((int16_t)raw_data_.registers.OUTY_L_G),
     imu_scale);
-  omega_imz_m = (3.14/180.0/1000.0)* ConvertInt16ToFloat(
+  omega_imz_m = (3.14/180.0/1000.0)* DecodeInt16<float>(
     (((int16_t)raw_data_.registers.OUTZ_H_G) << 8) | ((int16_t)raw_data_.registers.OUTZ_L_G),
     imu_scale);
   /* Accelerometer: signed 2's complement */
@@ -178,13 +178,13 @@ void ST_6DOFImu_LSM6DS33::GrabData() {
       break;
   }
 
-  f_imx_m = (9.81/1000.0) * ConvertInt16ToFloat(
+  f_imx_m = (9.81/1000.0) * DecodeInt16<float>(
     (((int16_t)raw_data_.registers.OUTX_H_XL) << 8) | ((int16_t)raw_data_.registers.OUTX_L_XL),
     imu_scale);
-  f_imy_m = (9.81/1000.0) * ConvertInt16ToFloat(
+  f_imy_m = (9.81/1000.0) * DecodeInt16<float>(
     (((int16_t)raw_data_.registers.OUTY_H_XL) << 8) | ((int16_t)raw_data_.registers.OUTY_L_XL),
     imu_scale);
-  f_imz_m = (9.81/1000.0) * ConvertInt16ToFloat(
+  f_imz_m = (9.81/1000.0) * DecodeInt16<float>(
     (((int16_t)raw_data_.registers.OUTZ_H_XL) << 8) | ((int16_t)raw_data_.registers.OUTZ_L_XL),
     imu_scale);
 }
